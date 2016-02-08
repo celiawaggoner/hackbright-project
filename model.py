@@ -14,9 +14,11 @@ class User(db.Model):
     __tablename__ = "users"
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    email = db.Column(db.String(50), nullable=True)
-    password = db.Column(db.String(50), nullable=True)
-    zipcode = db.Column(db.String(15), nullable=True)
+    first_name = db.Column(db.String(25), nullable=False)
+    last_name = db.Column(db.String(25), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(50), nullable=False)
+    zipcode = db.Column(db.String(15), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -28,10 +30,16 @@ class Studio(db.Model):
 
     __tablename__ = "studios"
 
+    studio_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+
 class Review(db.Model):
     """User reviews of studios"""
 
     __tablename__ = "reviews"
+
+    review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
 
 
 
