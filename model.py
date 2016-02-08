@@ -38,9 +38,9 @@ class Studio(db.Model):
     class_type = db.Column(db.String(50), nullable=True)
 
     def __repr__(self):
-    """Provide helpful representation when printed."""
+        """Provide helpful representation when printed."""
 
-    return "<Studio studio_id=%s name=%s>" % (self.studio_id, self.name)
+        return "<Studio studio_id=%s name=%s>" % (self.studio_id, self.name)
 
 
 class Review(db.Model):
@@ -56,14 +56,30 @@ class Review(db.Model):
     user = db.relationship("User", backref="reviews")
 
     #Define relationship to studio
-    studio = db.relationship("Studio", backref="studios")
+    studio = db.relationship("Studio", backref="reviews")
 
     def __repr__(self):
-    """Provide helpful representation when printed."""
+        """Provide helpful representation when printed."""
 
-    return "<Review review_id=%s user_id=%s studio_id=%s>" % (
-        self.review_id, self.user_id, self.studio_id)
+        return "<Review review_id=%s user_id=%s studio_id=%s>" % (self.review_id,
+        self.user_id, self.studio_id)
 
+
+class Favorite(db.Model):
+    """User's favorited studios"""
+
+    __tablename__ = "favorites"
+
+    favorite_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    notes = db.Column(db.String(500), nullable=True)
+
+    #Define relationship to user
+    user = db.relationship("User", backref="favorites")
+
+    #Define relationship to studio
+    studio = db.relationship("Studio", backref="favorites")
 
 
 ##############################################################################
