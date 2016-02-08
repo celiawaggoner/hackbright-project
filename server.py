@@ -4,14 +4,14 @@ from flask import Flask, render_template, redirect, request, flash, session, get
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db #data classes User, Review, Studio
+from model import connect_to_db, db, User, Review, Studio
 
 # from collections import Counter
 
 app = Flask(__name__)
 
 #Need to establish secret key to use Flask sessions
-app.secret_key = ""
+app.secret_key = "mewmewmew"
 
 #Raise an error if I use an undefined variable in Jinja
 app.jinja_env.undefined = StrictUndefined

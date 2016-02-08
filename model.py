@@ -25,12 +25,23 @@ class User(db.Model):
 
         return "<User user_id=%s email=%s>" % (self.user_id, self.email)
 
+
 class Studio(db.Model):
     """Studio details"""
 
     __tablename__ = "studios"
 
     studio_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    zipcode = db.Column(db.String(15), nullable=False)
+    website_url = db.Column(db.String(100), nullable=True)
+    class_type = db.Column(db.String(50), nullable=True)
+
+    def __repr__(self):
+    """Provide helpful representation when printed."""
+
+    return "<Studio studio_id=%s name=%s>" % (self.studio_id, self.name)
+
 
 class Review(db.Model):
     """User reviews of studios"""
@@ -40,6 +51,18 @@ class Review(db.Model):
     review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
     studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+
+    #Define relationship to user
+    user = db.relationship("User", backref="reviews")
+
+    #Define relationship to studio
+    studio = db.relationship("Studio", backref="studios")
+
+    def __repr__(self):
+    """Provide helpful representation when printed."""
+
+    return "<Review review_id=%s user_id=%s studio_id=%s>" % (
+        self.review_id, self.user_id, self.studio_id)
 
 
 

@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <title>HB Project</title>
+  <script src="https://code.jquery.com/jquery.js"></script>
+</head>
+
+<body>
+  <hr>
+    <ul>
+        {% for message in get_flashed_messages() %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+
+    {% if session.user %}
+    <a href="/logout"><button type="button">logout</button></a> 
+    {% endif %}
+
+  {% block content %} put your content here {% endblock %}
+
+</body>
+</html>
