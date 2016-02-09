@@ -8,6 +8,7 @@ db = SQLAlchemy()
 ##############################################################################
 # Model definitions
 
+
 class User(db.Model):
     """User of website."""
 
@@ -18,6 +19,8 @@ class User(db.Model):
     last_name = db.Column(db.String(25), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
+    city = db.Column(db.String(25), nullable=False)
+    state = db.Column(db.String(15), nullable=False)
     zipcode = db.Column(db.String(15), nullable=False)
 
     def __repr__(self):
@@ -33,9 +36,12 @@ class Studio(db.Model):
 
     studio_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
+    address = db.Column(db.String(200), nullable=False)
     zipcode = db.Column(db.String(15), nullable=False)
     website_url = db.Column(db.String(100), nullable=True)
     class_type = db.Column(db.String(50), nullable=True)
+    top_instructor = db.Column(db.String(50), nullable=True)
+    top_class = db.Column(db.String(50), nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -51,6 +57,15 @@ class Review(db.Model):
     review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
     studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    overall_rating
+    amenities_rating
+    cleanliness_rating
+    class_size rating
+    schedule_rating
+    class_pace
+    favorite_instructor
+    favorite_class
+    tip_text
 
     #Define relationship to user
     user = db.relationship("User", backref="reviews")
@@ -61,8 +76,7 @@ class Review(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Review review_id=%s user_id=%s studio_id=%s>" % (self.review_id,
-        self.user_id, self.studio_id)
+        return "<Review review_id=%s user_id=%s studio_id=%s>" % (self.review_id, self.user_id, self.studio_id)
 
 
 class Favorite(db.Model):
@@ -78,8 +92,38 @@ class Favorite(db.Model):
     #Define relationship to user
     user = db.relationship("User", backref="favorites")
 
+
+class Instructor(db.Model):
+    """Instructors"""
+
+    __tablename__ = "instructors"
+
+    instructor_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+
     #Define relationship to studio
-    studio = db.relationship("Studio", backref="favorites")
+    studio = db.relationship("Studio", backref="studios")
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Instructor instructor_id=%s name=%s>" % (self.instructor_id, self.name)
+
+
+class InstructorReview(db.Model):
+    """User reviews of instructors"""
+
+    __tablename__ = "instructor-reviews"
+
+    instructor_review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    instructor_id = db.Column(db.Integer, db.ForeignKey("instructors.instructor_id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+
+    #Define relationship to user
+    user = db.relationship("User", backref="instructor-reviews")
+
 
 
 ##############################################################################

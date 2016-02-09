@@ -6,6 +6,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Review, Studio, Favorite
 
+import api
+
 # from collections import Counter
 
 app = Flask(__name__)
