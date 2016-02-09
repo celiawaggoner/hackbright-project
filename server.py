@@ -4,9 +4,9 @@ from flask import Flask, render_template, redirect, request, flash, session, get
 
 from flask_debugtoolbar import DebugToolbarExtension
 
-from model import connect_to_db, db, User, Review, Studio, Favorite
+from model import connect_to_db, db, User, Review, Studio, Favorite, Instructor, InstructorReview
 
-import api
+from api import API_HOST, SEARCH_PATH, search
 
 import requests
 
@@ -95,14 +95,25 @@ def process_search():
     """Passes user imput into Yelp API search and return results"""
 
     #get input from search form
-    #run API search function
+    zipcode = request.args.get('zipcode')
 
-    r = requests.get("https://api.yelp.com/v2/search/?location=San Francisco, CA&limit=20&category_filter=fitness")
-    jdict = r.json()
+    # payload = {'term': 'Fitness & Instruction', 'location': zipcode, 'limit': 10}
 
-    print jdict
+    url_params = {
+        'term': 'Fitness & Instruction'.replace(' ', '+'),
+        'location': zipcode.replace(' ', '+'),
+        'limit': 10
+    }
 
-    return render_template
+    r = requests.get('api.yelp.com', '/v2/search/', params=url_params)
+
+    print(r.url)
+
+    studios_dict = r.json()
+
+    print studios_dict
+
+    # return render_template
 
 
 @app.route('/studio/<int:studio_id>')
