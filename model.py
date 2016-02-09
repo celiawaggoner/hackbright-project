@@ -57,15 +57,15 @@ class Review(db.Model):
     review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
     studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
-    overall_rating
-    amenities_rating
-    cleanliness_rating
-    class_size rating
-    schedule_rating
-    class_pace
-    favorite_instructor
-    favorite_class
-    tip_text
+    overall_rating = db.Column(db.Integer, nullable=False)
+    amenities_rating = db.Column(db.Integer, nullable=False)
+    cleanliness_rating = db.Column(db.Integer, nullable=False)
+    class_size_rating = db.Column(db.Integer, nullable=False)
+    schedule_rating = db.Column(db.Integer, nullable=False)
+    pace_rating = db.Column(db.String(25), nullable=False)
+    favorite_instructor = db.Column(db.String(25), nullable=True)
+    favorite_class = db.Column(db.String(25), nullable=True)
+    tip_text = db.Column(db.String(250), nullable=True)
 
     #Define relationship to user
     user = db.relationship("User", backref="reviews")

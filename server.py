@@ -8,6 +8,8 @@ from model import connect_to_db, db, User, Review, Studio, Favorite
 
 import api
 
+import requests
+
 # from collections import Counter
 
 app = Flask(__name__)
@@ -37,6 +39,28 @@ def registration_form():
 def check_if_new_user():
     """Check if user already exists. If not, add to database"""
 
+    #assigned variables to email and password entered in registration form
+    # email = request.form.get("email")
+    # password = request.form.get("password")
+
+    #getting a list of all users with that email that already exist in db
+    # users_with_email = db.session.query(User).filter(User.email == email).all()
+
+    #checking to see if there are any existing users in db with that email
+    #if not, add the new user info to db, add user to session, and redirect to profile
+    #if already exists, flash and return to homepage
+    # if len(users_with_email) == 0:
+    #     user = User(email=email, password=password)
+    #     user_id = user.user_id
+    #     db.session.add(user)
+    #     db.session.commit()
+    #     session['user'] = user_id
+    #     flash("Congrats! You've successfully registered")
+    #     return redirect('/user/' + str(user_id))
+    # else:
+    #     flash("This email address has already been registered. Please try again.")
+    #     return redirect("/")
+
 
 @app.route('/login')
 def login_form():
@@ -64,6 +88,28 @@ def logout():
     # session['user'] = None
     # flash("Logged out!")
     # return redirect('/')
+
+
+@app.route('/search-results')
+def process_search():
+    """Passes user imput into Yelp API search and return results"""
+
+    #get input from search form
+    #run API search function
+
+    r = requests.get("https://api.yelp.com/v2/search/?location=San Francisco, CA&limit=20&category_filter=fitness")
+    jdict = r.json()
+
+    print jdict
+
+    return render_template
+
+
+@app.route('/studio/<int:studio_id>')
+def show_studio_profile(studio_id):
+    """Show studio profile"""
+
+    return render_template("studio_profile.html")
 
 
 @app.route('/write-a-review')

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Write a review!</h1>
+
+<form>
+    <fieldset>
+        <legend>Give an overall rating:</legend>
+            <input type="radio" name="overall_rating" value="1">1
+            <input type="radio" name="overall_rating" value="2">2
+            <input type="radio" name="overall_rating" value="3">3
+            <input type="radio" name="overall_rating" value="4">4
+            <input type="radio" name="overall_rating" value="5">5
+    </fieldset>
+
+    <fieldset>
+        <legend>Rate the studio:</legend>
+            <p>Amenities</p>
+            <input type="radio" name="amenities_rating" value="1">1
+            <input type="radio" name="amenities_rating" value="2">2
+            <input type="radio" name="amenities_rating" value="3">3
+            <input type="radio" name="amenities_rating" value="4">4
+            <input type="radio" name="amenities_rating" value="5">5
+            <p>Cleanliness</p>
+            <input type="radio" name="cleanliness_rating" value="1">1
+            <input type="radio" name="cleanliness_rating" value="2">2
+            <input type="radio" name="cleanliness_rating" value="3">3
+            <input type="radio" name="cleanliness_rating" value="4">4
+            <input type="radio" name="cleanliness_rating" value="5">5
+    </fieldset>
+
+    <fieldset>
+        <legend>Rate the classes:</legend>
+            <p>Class size</p>
+            <input type="radio" name="class_size_rating" value="1">1
+            <input type="radio" name="class_size_rating" value="2">2
+            <input type="radio" name="class_size_rating" value="3">3
+            <input type="radio" name="class_size_rating" value="4">4
+            <input type="radio" name="class_size_rating" value="5">5
+            <p>Class schedule</p>
+            <input type="radio" name="schedule_rating" value="1">1
+            <input type="radio" name="schedule_rating" value="2">2
+            <input type="radio" name="schedule_rating" value="3">3
+            <input type="radio" name="schedule_rating" value="4">4
+            <input type="radio" name="schedule_rating" value="5">5
+            <p>Class pace</p>
+            <input type="radio" name="pace_rating" value="1">Barely broke a sweat
+            <input type="radio" name="pace_rating" value="3">Decent workout
+            <input type="radio" name="pace_rating" value="5">I was dying!
+    </fieldset>
+
+    <fieldset>
+        <legend>Rate the instructors:</legend>
+        <label>Who was your instructor?</label>
+        <input type="text" value>
+<!--Need to figure out how to show more forms to review multiple instructors-->
+    </fieldset>
+
+
+</form>
+
+{% endblock %}
