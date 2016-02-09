@@ -6,11 +6,21 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Review, Studio, Favorite, Instructor, InstructorReview
 
-from api import API_HOST, SEARCH_PATH, search
-
 import requests
 
-# from collections import Counter
+import os
+
+from yelp.client import Client
+from yelp.oauth1_authenticator import Oauth1Authenticator
+
+auth = Oauth1Authenticator(
+    consumer_key=os.environ['YELP_CONSUMER_KEY'],
+    consumer_secret=os.environ['YELP_CONSUMER_SECRET'],
+    token=os.environ['YELP_TOKEN'],
+    token_secret=os.environ['YELP_TOKEN_SECRET']
+)
+
+client = Client(auth)
 
 app = Flask(__name__)
 
@@ -97,23 +107,56 @@ def process_search():
     #get input from search form
     zipcode = request.args.get('zipcode')
 
-    # payload = {'term': 'Fitness & Instruction', 'location': zipcode, 'limit': 10}
+    # url_params = {
+    #     'term': 'Fitness & Instruction'.replace(' ', '+'),
+    #     'location': zipcode.replace(' ', '+'),
+    #     'limit': 10
+    # }
 
-    url_params = {
-        'term': 'Fitness & Instruction'.replace(' ', '+'),
-        'location': zipcode.replace(' ', '+'),
+    # r = requests.get('api.yelp.com', '/v2/search/', params=url_params)
+
+    # consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
+    # oauth_request = oauth2.Request(method="GET", url=url, parameters=url_params)
+
+    # token = oauth2.Token(TOKEN, TOKEN_SECRET)
+    # oauth_request.sign_request(
+    # oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
+    # signed_url = oauth_request.to_url()
+
+    # payload = {'oauth_consumer_key': CONSUMER_KEY, 'oauth_token': TOKEN,
+    #             'oauth_signature_method': hmac-sha1,
+    #             'oauth_signature': signed_url,
+    #             'oauth_timestamp': oauth2.generate_timestamp(),
+    #             'oauth_nonce': oauth2.generate_nonce(),
+    #             'term': 'Fitness & Instruction',
+    #             'location': zipcode,
+    #             'limit': 10}
+
+    # r = requests.get('https://api.yelp.com/v2/search', params=payload)
+
+    # # print(r.url)
+
+    # studios_dict = r.json()
+
+    # return studios_dict
+
+    # return render_template
+
+    params = {
+        'term': 'Fitness & Instruction',
+        'location': zipcode,
         'limit': 10
     }
 
-    r = requests.get('api.yelp.com', '/v2/search/', params=url_params)
+    response = client.search(**params)
 
-    print(r.url)
+    names = []
 
-    studios_dict = r.json()
+    for business in response.businesses:
+        name = business.name
+        names.append(name)
 
-    print studios_dict
-
-    # return render_template
+    return render_template("search_results.html", names=names)
 
 
 @app.route('/studio/<int:studio_id>')
