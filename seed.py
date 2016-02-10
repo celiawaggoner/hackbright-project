@@ -10,9 +10,9 @@ from model import Favorite
 from model import connect_to_db, db
 from server import app
 
-from faker import Faker
-fake = Faker()
-fake.seed(4321)
+# from faker import Faker
+# fake = Faker()
+# fake.seed(4321)
 
 
 def load_users():
@@ -24,10 +24,12 @@ def load_users():
     User.query.delete()
 
     # Read user file and insert data
-    for row in open("seed_data/user.txt"):
+    for row in open("seed_data/users.txt"):
         row = row.rstrip()
+        
         first_name, last_name, email, password, city, state, zipcode = row.split(",")
 
+        print first_name, last_name, email, password, city, state, zipcode 
         user = User(first_name=first_name,
                     last_name=last_name,
                     email=email,
@@ -35,7 +37,7 @@ def load_users():
                     city=city,
                     state=state,
                     zipcode=zipcode)
-
+        print "USER", user
         #Add user to database
         db.session.add(user)
 

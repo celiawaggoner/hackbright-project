@@ -119,6 +119,12 @@ def process_search():
     #studios is a list of business dictionaries
     studios = response.businesses
 
+    #instatiate studio to access attributes
+    for studio in studios:
+        studio = Studio(name=studio.name, address=str(studio.location.display_address),
+                        class_type=studio.categories['Category'].name,
+                        yelp_rating=studio.rating)
+
     return render_template("search_results.html", studios=studios)
 
 

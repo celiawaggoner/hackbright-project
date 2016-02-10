@@ -20,8 +20,8 @@ class User(db.Model):
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(50), nullable=False)
     city = db.Column(db.String(25), nullable=False)
-    state = db.Column(db.String(15), nullable=False)
-    zipcode = db.Column(db.String(15), nullable=False)
+    state = db.Column(db.String(25), nullable=False)
+    zipcode = db.Column(db.String(25), nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -124,7 +124,6 @@ class InstructorReview(db.Model):
 
     #Define relationship to user
     user = db.relationship("User", backref="instructor-reviews")
-
 
 
 ##############################################################################
