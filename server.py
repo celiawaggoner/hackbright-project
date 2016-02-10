@@ -122,8 +122,8 @@ def process_search():
     return render_template("search_results.html", studios=studios)
 
 
-@app.route('/studio/<int:studio_id>')
-def show_studio_profile(studio_id):
+@app.route('/studio/')
+def show_studio_profile():
     """Show studio profile"""
 
     return render_template("studio_profile.html")
