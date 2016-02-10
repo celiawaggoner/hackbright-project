@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
-{% for name in names %}
-<p>{{ name }}</p>
+
+{% for studio in studios %}
+<ul>
+    <li>{{ studio.name }}</li>
+    <li>{{ studio.location.display_address }}</li>
+    <li>{{ studio.categories }}</li>
+    <li>{{ studio.rating }}</li>
+</ul>
 {% endfor %}
 
 {% endblock %}

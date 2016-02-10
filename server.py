@@ -6,13 +6,12 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Review, Studio, Favorite, Instructor, InstructorReview
 
-import requests
-
 import os
 
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
+#create a client with API keys passed to Client constructor
 auth = Oauth1Authenticator(
     consumer_key=os.environ['YELP_CONSUMER_KEY'],
     consumer_secret=os.environ['YELP_CONSUMER_SECRET'],
@@ -107,56 +106,20 @@ def process_search():
     #get input from search form
     zipcode = request.args.get('zipcode')
 
-    # url_params = {
-    #     'term': 'Fitness & Instruction'.replace(' ', '+'),
-    #     'location': zipcode.replace(' ', '+'),
-    #     'limit': 10
-    # }
-
-    # r = requests.get('api.yelp.com', '/v2/search/', params=url_params)
-
-    # consumer = oauth2.Consumer(CONSUMER_KEY, CONSUMER_SECRET)
-    # oauth_request = oauth2.Request(method="GET", url=url, parameters=url_params)
-
-    # token = oauth2.Token(TOKEN, TOKEN_SECRET)
-    # oauth_request.sign_request(
-    # oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
-    # signed_url = oauth_request.to_url()
-
-    # payload = {'oauth_consumer_key': CONSUMER_KEY, 'oauth_token': TOKEN,
-    #             'oauth_signature_method': hmac-sha1,
-    #             'oauth_signature': signed_url,
-    #             'oauth_timestamp': oauth2.generate_timestamp(),
-    #             'oauth_nonce': oauth2.generate_nonce(),
-    #             'term': 'Fitness & Instruction',
-    #             'location': zipcode,
-    #             'limit': 10}
-
-    # r = requests.get('https://api.yelp.com/v2/search', params=payload)
-
-    # # print(r.url)
-
-    # studios_dict = r.json()
-
-    # return studios_dict
-
-    # return render_template
-
+    #create a set of parameters
     params = {
         'term': 'Fitness & Instruction',
         'location': zipcode,
         'limit': 10
     }
 
+    #query the Search API
     response = client.search(**params)
 
-    names = []
+    #studios is a list of business dictionaries
+    studios = response.businesses
 
-    for business in response.businesses:
-        name = business.name
-        names.append(name)
-
-    return render_template("search_results.html", names=names)
+    return render_template("search_results.html", studios=studios)
 
 
 @app.route('/studio/<int:studio_id>')
