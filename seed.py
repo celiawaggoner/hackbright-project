@@ -43,28 +43,28 @@ def load_users():
     db.session.commit()
 
 
-def load_studios():
-    """Adds studios into database"""
+# def load_studios():
+#     """Adds studios into database"""
 
-    print "Studios"
+#     print "Studios"
 
-    Studio.query.delete()
+#     Studio.query.delete()
 
-    # Read studio file and insert data
-    for row in open("seed_data/studios.txt"):
-        row = row.rstrip()
-        name, address, class_type, yelp_rating, website_url = row.split(",")
+#     # Read studio file and insert data
+#     for row in open("seed_data/studios.txt"):
+#         row = row.rstrip()
+#         name, address, class_type, yelp_rating, website_url = row.split(",")
 
-        studio = Studio(name=name,
-                        address=address,
-                        class_type=class_type,
-                        yelp_rating=yelp_rating,
-                        website_url=website_url)
+#         studio = Studio(name=name,
+#                         address=address,
+#                         class_type=class_type,
+#                         yelp_rating=yelp_rating,
+#                         website_url=website_url)
 
-        #Add studio to database
-        db.session.add(studio)
+#         #Add studio to database
+#         db.session.add(studio)
 
-    db.session.commit()
+#     db.session.commit()
 
 
 if __name__ == "__main__":
@@ -75,5 +75,5 @@ if __name__ == "__main__":
 
     # Import different types of data
     load_users()
-    load_studios()
+    # load_studios()
 

@@ -35,14 +35,14 @@ class Studio(db.Model):
     __tablename__ = "studios"
 
     studio_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     website_url = db.Column(db.String(100), nullable=True)
-    class_type = db.Column(db.String(50), nullable=True)
+    class_type = db.Column(db.String(150), nullable=True)
     top_instructor = db.Column(db.String(50), nullable=True)
     top_class = db.Column(db.String(50), nullable=True)
-    yelp_rating = db.Column(db.Float, nullable=True)
-   
+    yelp_rating_url = db.Column(db.String(100), nullable=True)
+    yelp_image_url = db.Column(db.String(100), nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Write a review!</h1>
+<h2>Write a review!</h2>
 
-<form>
+<form action="" method="post">
     <fieldset>
         <legend>Give an overall rating:</legend>
             <input type="radio" name="overall_rating" value="1">1
@@ -52,10 +52,16 @@
     <fieldset>
         <legend>Rate the instructors:</legend>
         <label>Who was your instructor?</label>
-        <input type="text" value>
+        <input type="text" value="name">
+        <p>What'd you think?</p>
+        <input type="radio" name="instructor_rating" value="1">1
+        <input type="radio" name="instructor_rating" value="2">2
+        <input type="radio" name="instructor_rating" value="3">3
+        <input type="radio" name="instructor_rating" value="4">4
+        <input type="radio" name="instructor_rating" value="5">5
 <!--Need to figure out how to show more forms to review multiple instructors-->
     </fieldset>
-
+    <input type="submit" value="Submit">
 
 </form>
 

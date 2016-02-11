@@ -119,18 +119,47 @@ def process_search():
     #studios is a list of business dictionaries
     studios = response.businesses
 
-    #instantiate studio object
-
     return render_template("search_results.html", studios=studios)
 
 
-@app.route('/studios/<name>')
-def show_studio_profile(name):
+@app.route('/studios/<zipcode>/<name>')
+def show_studio_profile(zipcode, name):
     """Show studio profile"""
 
-    #query studio table to get attributes
+    params = {
+        'term': name,
+        'location': zipcode,
+        'limit': 1
+    }
 
-    return render_template("studio_profile.html", name=name)
+    #query the Search API
+    response = client.search(**params)
+
+    studios = response.businesses
+
+    # for studio in studios:
+
+    # name = studio.name
+    # address = studio.location.display_address
+    # class_type = studio.categories
+    # yelp_rating_url = studio.rating_img_url
+    # yelp_image_url = studio.image_url
+
+    # #     #instantiate studio object
+    # studio = Studio(name=name, address=address, class_type=class_type,
+    #                 yelp_rating_url=yelp_rating_url,
+    #                 yelp_image_url=yelp_image_url)
+   
+    # db.session.add(studio)
+
+    # db.session.commit()
+
+    return render_template("studio_profile.html", studios=studios)
+                        #    name=name,
+                        #    address=address,
+                        #    class_type=class_type,
+                        #    yelp_rating_url=yelp_rating_url,
+                        # yelp_image_url=yelp_image_url)
 
 
 @app.route('/write-a-review')
@@ -138,6 +167,13 @@ def show_review_form():
     """Show blank review form"""
 
     return render_template("review.html")
+
+
+@app.route('/process-review-form')
+def process_review_form():
+    """Add input from review form to db and update overall scores"""
+
+    return redirect('/studios' + str(name))
 
 
 
