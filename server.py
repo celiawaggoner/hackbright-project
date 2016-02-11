@@ -137,22 +137,21 @@ def show_studio_profile(zipcode, name):
 
     studios = response.businesses
 
-    # for studio in studios:
+    for studio in studios:
+        name = studio.name
+        address = studio.location.display_address
+        class_type = studio.categories
+        yelp_rating_url = studio.rating_img_url
+        yelp_image_url = studio.image_url
 
-    # name = studio.name
-    # address = studio.location.display_address
-    # class_type = studio.categories
-    # yelp_rating_url = studio.rating_img_url
-    # yelp_image_url = studio.image_url
-
-    # #     #instantiate studio object
-    # studio = Studio(name=name, address=address, class_type=class_type,
-    #                 yelp_rating_url=yelp_rating_url,
-    #                 yelp_image_url=yelp_image_url)
+        #instantiate studio object
+        studio = Studio(name=name, address=address, class_type=class_type,
+                        yelp_rating_url=yelp_rating_url,
+                        yelp_image_url=yelp_image_url)
    
-    # db.session.add(studio)
+        db.session.add(studio)
 
-    # db.session.commit()
+    db.session.commit()
 
     return render_template("studio_profile.html", studios=studios)
                         #    name=name,
