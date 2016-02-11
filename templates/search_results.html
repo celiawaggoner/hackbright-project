@@ -4,7 +4,8 @@
 
 {% for studio in studios %}
 <div>
-    <h3><a href="/studio/name={{ studio.name }}">{{ studio.name }}</a></h3>
+    <img src="{{ studio.image_url }}">
+    <h3><a href="{{ url_for('show_studio_profile', name=studio.name)}}">{{ studio.name }}</a></h3>
     <h4>Address:</h4>
     {% for item in studio.location.display_address %}
     <p>{{ item }}</p>
@@ -15,8 +16,9 @@
         <li>{{ category.name }}</li>
         {% endfor %}
     </ul>
-    <p>{{ studio.rating }} Stars on Yelp</p>
+    <img src ="{{ studio.rating_img_url }}">
 </div>
+<hr>
 {% endfor %}
 
 {% endblock %}

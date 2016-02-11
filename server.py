@@ -1,6 +1,6 @@
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session, get_flashed_messages
+from flask import Flask, render_template, redirect, request, flash, session, get_flashed_messages, url_for
 
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -99,7 +99,7 @@ def logout():
     # return redirect('/')
 
 
-@app.route('/search-results')
+@app.route('/studios')
 def process_search():
     """Passes user imput into Yelp API search and return results"""
 
@@ -119,16 +119,18 @@ def process_search():
     #studios is a list of business dictionaries
     studios = response.businesses
 
+    #instantiate studio object
+
     return render_template("search_results.html", studios=studios)
 
 
-@app.route('/studio/', )
-def show_studio_profile():
+@app.route('/studios/<name>')
+def show_studio_profile(name):
     """Show studio profile"""
 
-    name = request.args.get("studio.name")
+    #query studio table to get attributes
 
-    return render_template("studio_profile.html")
+    return render_template("studio_profile.html", name=name)
 
 
 @app.route('/write-a-review')

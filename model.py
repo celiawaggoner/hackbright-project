@@ -42,6 +42,7 @@ class Studio(db.Model):
     top_instructor = db.Column(db.String(50), nullable=True)
     top_class = db.Column(db.String(50), nullable=True)
     yelp_rating = db.Column(db.Float, nullable=True)
+   
 
     def __repr__(self):
         """Provide helpful representation when printed."""
