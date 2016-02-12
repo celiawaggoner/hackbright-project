@@ -1,6 +1,6 @@
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session, get_flashed_messages, url_for
+from flask import Flask, render_template, redirect, request, flash, session, get_flashed_messages, url_for, jsonify
 
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -49,26 +49,32 @@ def check_if_new_user():
     """Check if user already exists. If not, add to database"""
 
     #assigned variables to email and password entered in registration form
-    # email = request.form.get("email")
-    # password = request.form.get("password")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    first_name = request.form.get("firstname")
+    last_name = request.form.get("lastname")
+    city = request.form.get("city")
+    state = request.form.get("state")
+    zipcode = request.form.get("zipcode")
 
     #getting a list of all users with that email that already exist in db
-    # users_with_email = db.session.query(User).filter(User.email == email).all()
+    users_with_email = db.session.query(User).filter(User.email == email).all()
 
     #checking to see if there are any existing users in db with that email
     #if not, add the new user info to db, add user to session, and redirect to profile
     #if already exists, flash and return to homepage
-    # if len(users_with_email) == 0:
-    #     user = User(email=email, password=password)
-    #     user_id = user.user_id
-    #     db.session.add(user)
-    #     db.session.commit()
-    #     session['user'] = user_id
-    #     flash("Congrats! You've successfully registered")
-    #     return redirect('/user/' + str(user_id))
-    # else:
-    #     flash("This email address has already been registered. Please try again.")
-    #     return redirect("/")
+    if len(users_with_email) == 0:
+        user = User(email=email, password=password, first_name=first_name,
+                    last_name=last_name, city=city, state=state, zipcode=zipcode)
+        user_id = user.user_id
+        db.session.add(user)
+        db.session.commit()
+        session['user'] = user_id
+        flash("Congrats! You've successfully registered")
+        return redirect('/user/' + str(user_id))
+    else:
+        flash("An account with this email address already exists. Please try again.")
+        return redirect("/")
 
 
 @app.route('/login')
@@ -82,21 +88,47 @@ def login_form():
 def check_if_existing_user():
     """Check if user's email and password match. If so, log in."""
 
+    #Get email and password form login form submission
+    email = request.form.get("email")
+    password = request.form.get("password")
 
-@app.route('/user/<int:user_id>')
+    #assign user equal to the user in db with matching records
+    user = db.session.query(User).filter((User.email == email) & (User.password == password)).first()
+
+    #if user does not exist, flash message
+    #if user does exist, add id to session and redirect to user profile
+    if not user:
+        flash("Information provided does not match our records. Please try again.")
+        return redirect("/")
+    else:
+        user_id = user.user_id
+        session['user'] = user_id
+        flash("You have been successfully logged in.")
+        return redirect('/user/' + str(user_id))
+
+
+@app.route('/user/<user_id>')
 def show_user_profile(user_id):
     """Show user profile"""
 
-    return render_template("user_profile.html")
+    user = User.query.filter_by(user_id=user_id).one()
 
+    first_name = user.first_name
+    last_name = user.last_name
+    city = user.city
+    state = user.state
+
+    return render_template("user_profile.html", first_name=first_name,
+                           last_name=last_name, city=city, state=state)
+                    
 
 @app.route('/logout')
 def logout():
     """Logs out user"""
 
-    # session['user'] = None
-    # flash("Logged out!")
-    # return redirect('/')
+    session['user'] = None
+    flash("You've successfully logged out!")
+    return redirect('/')
 
 
 @app.route('/studios')
@@ -110,7 +142,7 @@ def process_search():
     params = {
         'term': 'Fitness & Instruction',
         'location': zipcode,
-        'limit': 10
+        'limit': 20
     }
 
     #query the Search API
@@ -122,9 +154,10 @@ def process_search():
     return render_template("search_results.html", studios=studios)
 
 
-@app.route('/studios/<zipcode>/<name>')
+@app.route('/studios/<zipcode>/<name>', methods=["GET"])
 def show_studio_profile(zipcode, name):
-    """Show studio profile"""
+    """Show studio profile and if a user is logged in,
+        let them favorite the studio or add a review."""
 
     params = {
         'term': name,
@@ -135,30 +168,10 @@ def show_studio_profile(zipcode, name):
     #query the Search API
     response = client.search(**params)
 
+    #studios is list of studios in response
     studios = response.businesses
 
-    for studio in studios:
-        name = studio.name
-        address = studio.location.display_address
-        class_type = studio.categories
-        yelp_rating_url = studio.rating_img_url
-        yelp_image_url = studio.image_url
-
-        #instantiate studio object
-        studio = Studio(name=name, address=address, class_type=class_type,
-                        yelp_rating_url=yelp_rating_url,
-                        yelp_image_url=yelp_image_url)
-   
-        db.session.add(studio)
-
-    db.session.commit()
-
     return render_template("studio_profile.html", studios=studios)
-                        #    name=name,
-                        #    address=address,
-                        #    class_type=class_type,
-                        #    yelp_rating_url=yelp_rating_url,
-                        # yelp_image_url=yelp_image_url)
 
 
 @app.route('/write-a-review')
@@ -168,12 +181,51 @@ def show_review_form():
     return render_template("review.html")
 
 
-@app.route('/process-review-form')
-def process_review_form():
+@app.route('/studios/<zipcode>/<name>', methods=["POST"])
+def process_review_form(zipcode, name):
     """Add input from review form to db and update overall scores"""
+
+    overall = request.form.get("overall_rating")
+    amenities = request.form.get("amenities_rating")
+    cleanliness = request.form.get("cleanliness_rating")
+    class_size = request.form.get("class_size_rating")
+    schedule = request.form.get("schedule_rating")
+    class_pace = request.form.get("pace_rating")
+
+    #establish user id and studio id foreign keys
+
+    #check if user already reviewed this studio
+    #if already did, update ratings
+    #if not, instansiate new review
+    review = Review()
+
+    #check if user already reviewed this instructor
+    #if so, update rating
+    #if not, instantiate instructor review
+    instructor_review = InstructorReview()
+
+    #check if instructor exists
+    #if exists, update rating
 
     return redirect('/studios' + str(name))
 
+
+@app.route('/favorite/studio', methods=["POST"])
+def favorite_studio():
+    """Update user profile and db to reflect favorited studio"""
+
+    # results = request.form.get(results)
+
+    #instatiate studio user interacts with and add to db
+    # studio = Studio()
+    # studio_id = studio.studio_id
+
+    #instantiate favorite and add/commit to db
+    favorite = Favorite()
+
+    #update user profile page with list of favorites
+
+    return jsonify({'favorite_studio': 'success'})
 
 
 if __name__ == "__main__":

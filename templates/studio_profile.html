@@ -4,7 +4,7 @@
 {% for studio in studios %}
 <div>
     <img src="{{ studio.image_url }}">
-    <h3><a href="{{ url_for('show_studio_profile', zipcode=studio.location.postal_code, name=studio.name)}}">{{ studio.name }}</a></h3>
+    <h3>{{ studio.name }}</h3>
     <h4>Address:</h4>
     {% for item in studio.location.display_address %}
     <p>{{ item }}</p>
@@ -18,8 +18,46 @@
     <img src ="{{ studio.rating_img_url }}">
 </div>
 <hr>
+
+
+<div>
+    <h4>Ratings</h4>
+    <p>Overall score: </p>
+    <p>Amenities score: </p>
+    <p>Cleanliness score: </p>
+    <p>Class size score: </p>
+    <p>Schedule score: </p>
+    <p>Pace score: </p>
+</div>
+
+{% if session.user %}
+<a href="/write-a-review"><button type="button">Review this studio</button></a>
+
+<div id="favorite-div">
+    <button id="favorite"><span class="glyphicon glyphicon-heart"></span> Favorite</button></a>
+    <span id="favorite-studio"></span>
+</div>
+
+
+{% endif %}
+
 {% endfor %}
 
-<a href="/write-a-review"><button type="button">Review this studio</button></a>
+    <script>
+
+        function handleFavorite(evt) {
+            evt.preventDefault();
+          $.post('/favorite/studio', {}, function (data) {
+            $('#favorite-studio').text('You favorited this!');
+            $('#favorite').attr('disabled', true);
+            $('#favorite').css('color', 'red');
+          });
+        }
+
+        $('#favorite').on('click', handleFavorite);
+
+    </script>
+
+
 
 {% endblock %}
