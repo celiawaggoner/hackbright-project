@@ -34,7 +34,9 @@
 <a href="/write-a-review"><button type="button">Review this studio</button></a>
 
 <div id="favorite-div">
-    <button id="favorite"><span class="glyphicon glyphicon-heart"></span> Favorite</button></a>
+    <button id="favorite" data-name={{ name }} data-zipcode={{ zipcode }}>
+        <span class="glyphicon glyphicon-heart"></span> Favorite
+    </button>
     <span id="favorite-studio"></span>
 </div>
 
@@ -46,8 +48,11 @@
     <script>
 
         function handleFavorite(evt) {
-            evt.preventDefault();
-          $.post('/favorite/studio', {}, function (data) {
+            var data = {
+                        "name": $("#favorite").data('name'),
+                        "zipcode": $("#favorite").data('zipcode')
+                        };
+          $.post('/favorite/studio', data, function (data) {
             $('#favorite-studio').text('You favorited this!');
             $('#favorite').attr('disabled', true);
             $('#favorite').css('color', 'red');

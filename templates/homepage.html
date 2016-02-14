@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
+<div>
+    <form action="/studios">
+    <label>Discover new workout classes:
+        <input type="text" name="zipcode" value="Zipcode">
+    </label>
+    <input type="submit" value="Search">
+    </form>
+</div>
 
 {% endblock %}

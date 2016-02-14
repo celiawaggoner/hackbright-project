@@ -4,6 +4,8 @@ from flask import Flask, render_template, redirect, request, flash, session, get
 
 from flask_debugtoolbar import DebugToolbarExtension
 
+from flask_sqlalchemy import SQLAlchemy
+
 from model import connect_to_db, db, User, Review, Studio, Favorite, Instructor, InstructorReview
 
 import os
@@ -66,9 +68,9 @@ def check_if_new_user():
     if len(users_with_email) == 0:
         user = User(email=email, password=password, first_name=first_name,
                     last_name=last_name, city=city, state=state, zipcode=zipcode)
-        user_id = user.user_id
         db.session.add(user)
         db.session.commit()
+        user_id = user.user_id
         session['user'] = user_id
         flash("Congrats! You've successfully registered")
         return redirect('/user/' + str(user_id))
@@ -111,15 +113,36 @@ def check_if_existing_user():
 def show_user_profile(user_id):
     """Show user profile"""
 
+    #query db for user
     user = User.query.filter_by(user_id=user_id).one()
 
+    #define attributes
     first_name = user.first_name
     last_name = user.last_name
     city = user.city
     state = user.state
 
+    #query db for all of user's favorites
+    favorites = Favorite.query.filter(Favorite.user_id == user_id).all()
+
+    names = []
+    zipcodes = []
+
+    #loop over favorites and query db for studio info
+    for favorite in favorites:
+        studio_id = favorite.studio_id
+        studio = Studio.query.get(studio_id)
+        name = studio.name
+        zipcode = studio.zipcode
+        names.append(name)
+        zipcodes.append(zipcode)
+
+    #zip together lists of studio names and zipcodes to show in user profile
+    studio_info = zip(names, zipcodes)
+
     return render_template("user_profile.html", first_name=first_name,
-                           last_name=last_name, city=city, state=state)
+                           last_name=last_name, city=city, state=state,
+                           studio_info=studio_info)
                     
 
 @app.route('/logout')
@@ -151,13 +174,26 @@ def process_search():
     #studios is a list of business dictionaries
     studios = response.businesses
 
+    for studio in studios:
+        studio = Studio.query.filter(Studio.studio_id == studio.id).one()
+        if not studio:
+            studio = Studio(studio_id=studio.id, name=studio.name,
+                        zipcode=studio.location.postal_code)
+            db.session.add(studio)
+
+    db.session.commit()
+
     return render_template("search_results.html", studios=studios)
 
 
-@app.route('/studios/<zipcode>/<name>', methods=["GET"])
-def show_studio_profile(zipcode, name):
+@app.route('/studios/<studio_id>', methods=["GET"])
+def show_studio_profile(studio_id):
     """Show studio profile and if a user is logged in,
         let them favorite the studio or add a review."""
+
+    studio = Studio.query.filter(Studio.studio_id == studio_id).one()
+    name = studio.name
+    zipcode = studio.zipcode
 
     params = {
         'term': name,
@@ -171,7 +207,9 @@ def show_studio_profile(zipcode, name):
     #studios is list of studios in response
     studios = response.businesses
 
-    return render_template("studio_profile.html", studios=studios)
+
+    return render_template("studio_profile.html", studios=studios,
+                            name=name, zipcode=zipcode)
 
 
 @app.route('/write-a-review')
@@ -214,16 +252,23 @@ def process_review_form(zipcode, name):
 def favorite_studio():
     """Update user profile and db to reflect favorited studio"""
 
-    # results = request.form.get(results)
+    #get studio info from ajax request
+    name = request.form.get('name')
+    zipcode = request.form.get('zipcode')
 
-    #instatiate studio user interacts with and add to db
-    # studio = Studio()
-    # studio_id = studio.studio_id
+    studio = Studio.query.filter(Studio.name == name, Studio.zipcode == zipcode).one()
+    studio_id = studio.studio_id
+    
+    #get user id from session
+    user_id = session['user']
 
     #instantiate favorite and add/commit to db
-    favorite = Favorite()
+    favorite = Favorite(user_id=user_id, studio_id=studio_id)
+    favorite_id = favorite.favorite_id
+    db.session.add(favorite)
+    db.session.commit()
 
-    #update user profile page with list of favorites
+    session['favorite'] = favorite_id
 
     return jsonify({'favorite_studio': 'success'})
 

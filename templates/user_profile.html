@@ -6,7 +6,13 @@
 
 <div>
     <h5>My Favorite Studios</h5>
-
+    <ul>
+    {% for studio in studio_info %}
+    <a href="/studios/{{ studio[1] }}/{{ studio[0] }}">
+        <li>{{ studio[0] }}</li>
+    </a>
+    {% endfor %}
+    </ul>
 </div>
 
 {% endblock %}

@@ -34,7 +34,8 @@ class Studio(db.Model):
 
     __tablename__ = "studios"
 
-    studio_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    # studio_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    studio_id = db.Column(db.String(150), primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.String(200), nullable=True)
     zipcode = db.Column(db.String(25), nullable=False)
@@ -65,7 +66,8 @@ class Review(db.Model):
 
     review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    # studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
     overall_rating = db.Column(db.Integer, nullable=True)
     amenities_rating = db.Column(db.Integer, nullable=True)
     cleanliness_rating = db.Column(db.Integer, nullable=True)
@@ -95,7 +97,8 @@ class Favorite(db.Model):
 
     favorite_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    # studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
     notes = db.Column(db.String(500), nullable=True)
 
     #Define relationship to user
@@ -108,7 +111,8 @@ class Instructor(db.Model):
     __tablename__ = "instructors"
 
     instructor_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    # studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
+    studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
     name = db.Column(db.String(50), nullable=False)
 
     #Define relationship to studio
