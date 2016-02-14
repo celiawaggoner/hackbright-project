@@ -7,9 +7,9 @@
 <div>
     <h5>My Favorite Studios</h5>
     <ul>
-    {% for studio in studio_info %}
-    <a href="/studios/{{ studio[1] }}/{{ studio[0] }}">
-        <li>{{ studio[0] }}</li>
+    {% for favorite in favorites %}
+    <a href="/studios/{{ favorite.studio_id }}">
+        <li>{{ favorite.studio_id }}</li>
     </a>
     {% endfor %}
     </ul>

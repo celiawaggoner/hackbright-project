@@ -123,27 +123,16 @@ def show_user_profile(user_id):
     state = user.state
 
     #query db for all of user's favorites
-    favorites = Favorite.query.filter(Favorite.user_id == user_id).all()
-
-    names = []
-    zipcodes = []
+    favorites = user.favorites
 
     #loop over favorites and query db for studio info
     for favorite in favorites:
         studio_id = favorite.studio_id
-        studio = Studio.query.get(studio_id)
-        name = studio.name
-        zipcode = studio.zipcode
-        names.append(name)
-        zipcodes.append(zipcode)
-
-    #zip together lists of studio names and zipcodes to show in user profile
-    studio_info = zip(names, zipcodes)
 
     return render_template("user_profile.html", first_name=first_name,
                            last_name=last_name, city=city, state=state,
-                           studio_info=studio_info)
-                    
+                           favorites=favorites)
+                
 
 @app.route('/logout')
 def logout():
@@ -175,9 +164,10 @@ def process_search():
     studios = response.businesses
 
     for studio in studios:
-        studio = Studio.query.filter(Studio.studio_id == studio.id).one()
-        if not studio:
-            studio = Studio(studio_id=studio.id, name=studio.name,
+        studio_id = studio.id
+        existing_studio = Studio.query.filter(Studio.studio_id == studio_id).all()
+        if not existing_studio:
+            studio = Studio(studio_id=studio_id, name=studio.name,
                         zipcode=studio.location.postal_code)
             db.session.add(studio)
 
@@ -191,6 +181,7 @@ def show_studio_profile(studio_id):
     """Show studio profile and if a user is logged in,
         let them favorite the studio or add a review."""
 
+    studio_id = studio_id
     studio = Studio.query.filter(Studio.studio_id == studio_id).one()
     name = studio.name
     zipcode = studio.zipcode
@@ -207,20 +198,21 @@ def show_studio_profile(studio_id):
     #studios is list of studios in response
     studios = response.businesses
 
-
     return render_template("studio_profile.html", studios=studios,
                             name=name, zipcode=zipcode)
 
 
-@app.route('/write-a-review')
-def show_review_form():
+@app.route('/write-a-review/<studio_id>')
+def show_review_form(studio_id):
     """Show blank review form"""
 
-    return render_template("review.html")
+    id = studio_id
+
+    return render_template("review.html", id=id)
 
 
-@app.route('/studios/<zipcode>/<name>', methods=["POST"])
-def process_review_form(zipcode, name):
+@app.route('/review/studio', methods=["POST"])
+def process_review_form():
     """Add input from review form to db and update overall scores"""
 
     overall = request.form.get("overall_rating")
@@ -229,13 +221,19 @@ def process_review_form(zipcode, name):
     class_size = request.form.get("class_size_rating")
     schedule = request.form.get("schedule_rating")
     class_pace = request.form.get("pace_rating")
+    studio_id = request.form.get("studio_id")
 
     #establish user id and studio id foreign keys
+    user_id = session['user']
 
     #check if user already reviewed this studio
     #if already did, update ratings
     #if not, instansiate new review
-    review = Review()
+    existing_review = Review.query.filter(Review.user_id == user_id, Review.studio_id == studio_id).one()
+    if not existing_review:
+        review = Review(user_id=user_id, studio_id=studio_id, )
+        db.session.add(review)
+        db.session.commit()
 
     #check if user already reviewed this instructor
     #if so, update rating
@@ -245,32 +243,38 @@ def process_review_form(zipcode, name):
     #check if instructor exists
     #if exists, update rating
 
-    return redirect('/studios' + str(name))
+    return redirect('/studios/' + str(studio_id))
 
 
 @app.route('/favorite/studio', methods=["POST"])
 def favorite_studio():
-    """Update user profile and db to reflect favorited studio"""
+    """Add favorite to db and user profile"""
 
     #get studio info from ajax request
-    name = request.form.get('name')
-    zipcode = request.form.get('zipcode')
+    # name = request.form.get('name')
+    # zipcode = request.form.get('zipcode')
+    studio_id = request.form.get("studio_id")
 
-    studio = Studio.query.filter(Studio.name == name, Studio.zipcode == zipcode).one()
-    studio_id = studio.studio_id
-    
     #get user id from session
     user_id = session['user']
 
     #instantiate favorite and add/commit to db
-    favorite = Favorite(user_id=user_id, studio_id=studio_id)
-    favorite_id = favorite.favorite_id
-    db.session.add(favorite)
-    db.session.commit()
+    favorite = Favorite.query.filter(Favorite.user_id == user_id, 
+                                     Favorite.studio_id == studio_id).all()
 
-    session['favorite'] = favorite_id
+    if not favorite:
+        favorite = Favorite(user_id=user_id, studio_id=studio_id)
+        db.session.add(favorite)
+        db.session.commit()
+
+        favorite_id = favorite.favorite_id
+        session['favorite'] = favorite_id
 
     return jsonify({'favorite_studio': 'success'})
+
+@app.route('/unfavorite/studio', methods=["POST"])
+def unfavorite_studio():
+    """Remove favorite from db and user profile"""
 
 
 if __name__ == "__main__":

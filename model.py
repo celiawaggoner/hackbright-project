@@ -97,8 +97,8 @@ class Favorite(db.Model):
 
     favorite_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    # studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
     studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
+    # studio_name = db.Column(db.String(100), db.ForeignKey("studios.name"), nullable=False)
     notes = db.Column(db.String(500), nullable=True)
 
     #Define relationship to user

@@ -3,7 +3,8 @@
 
 <h2>Write a review!</h2>
 
-<form action="" method="POST">
+<form action="/review/studio" method="POST">
+    <input type="hidden" name="studio_id" value={{ id }}>
     <fieldset>
         <legend>Give an overall rating:</legend>
             <input type="radio" name="overall_rating" value="1">1
