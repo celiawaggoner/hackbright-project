@@ -33,6 +33,18 @@
 {% if session.user %}
 <a href="/write-a-review/{{ studio.id }}"><button type="button">Review this studio</button></a>
 
+
+{% if favorited %}
+<div id="favorite-div">
+    <button style="color:red" id="favorite" data-id={{ studio.id }}>
+        <span class="glyphicon glyphicon-heart"></span> Favorite
+    </button>
+    <span id="notes"></span>
+    <span id="favorite-studio">This is one of your favorites!</span>
+</div>
+{% endif %}
+
+{% if not favorited %}
 <div id="favorite-div">
     <button id="favorite" data-id={{ studio.id }}>
         <span class="glyphicon glyphicon-heart"></span> Favorite
@@ -40,7 +52,7 @@
     <span id="notes"></span>
     <span id="favorite-studio"></span>
 </div>
-
+{% endif %}
 
 {% endif %}
 
@@ -48,32 +60,60 @@
 
     <script>
 
-        function handleFavorite(evt) {
-            $('#notes').html()
+    function favorite() {
+        if ($('#favorite').css('color') !== 'red') {
+            function handleFavorite(evt) {
             var data = {
                         "studio_id": $("#favorite").data('id'),
                         };
-          $.post('/favorite/studio', data, function (data) {
-            $('#favorite-studio').text('You favorited this!');
-            // $('#favorite').attr('disabled', true);
-            $('#favorite').css('color', 'red');
-          });
+            $.post('/favorite/studio', data, function (data) {
+                $('#favorite-studio').text('You favorited this!');
+                $('#favorite').css('color', 'red');
+                });
+            }
         }
+        else {
+            function removeFavorite(evt) {
+            var data = {
+                       "studio_id": $("#favorite").data('id')
+                        };
+            $.post('/unfavorite/studio', data, function (data) {
+                $('#favorite-studio').text('You unfavorited this.')      
+                $('#favorite').css('color', '');
+                });  
+            }
+        }
+    }
 
-        // function UnFavorite(evt) {
+        // function handleFavorite(evt) {
         //     var data = {
-        //                 "name": $("#favorite").data('name'),
-        //                 "zipcode": $("#favorite").data('zipcode')
+        //                 "studio_id": $("#favorite").data('id'),
+        //                 };
+        //   $.post('/favorite/studio', data, function (data) {
+        //     $('#favorite-studio').text('You favorited this!');
+        //     $('#favorite').css('color', 'red');
+        //   });
+        // }
+
+
+        // function removeFavorite(evt) {
+        //     var data = {
+        //                "studio_id": $("#favorite").data('id')
         //                 };
         //   $.post('/unfavorite/studio', data, function (data) {
-        //     $('#favorite-studio').text('You unfavorited this.');
-        //     // $('#favorite').attr('disabled', true);
+        //     $('#favorite-studio').text('You unfavorited this.')       
         //     $('#favorite').css('color', '');
         //   });  
         // }
 
-        $('#favorite').on('click', handleFavorite);
+        // $('#favorite').toggle(handleFavorite, removeFavorite);
 
+        // $('#favorite').toggle(handleFavorite);
+
+
+        $('#favorite').on('click', favorite);
+
+    
     </script>
 
 {% endblock %}

@@ -125,10 +125,6 @@ def show_user_profile(user_id):
     #query db for all of user's favorites
     favorites = user.favorites
 
-    #loop over favorites and query db for studio info
-    for favorite in favorites:
-        studio_id = favorite.studio_id
-
     return render_template("user_profile.html", first_name=first_name,
                            last_name=last_name, city=city, state=state,
                            favorites=favorites)
@@ -186,6 +182,8 @@ def show_studio_profile(studio_id):
     name = studio.name
     zipcode = studio.zipcode
 
+    user_id = session['user']
+
     params = {
         'term': name,
         'location': zipcode,
@@ -198,8 +196,10 @@ def show_studio_profile(studio_id):
     #studios is list of studios in response
     studios = response.businesses
 
+    favorited = Favorite.query.filter(Favorite.user_id == user_id, Favorite.studio_id == studio_id).first()
+
     return render_template("studio_profile.html", studios=studios,
-                            name=name, zipcode=zipcode)
+                            name=name, zipcode=zipcode, favorited=favorited)
 
 
 @app.route('/write-a-review/<studio_id>')
@@ -251,8 +251,6 @@ def favorite_studio():
     """Add favorite to db and user profile"""
 
     #get studio info from ajax request
-    # name = request.form.get('name')
-    # zipcode = request.form.get('zipcode')
     studio_id = request.form.get("studio_id")
 
     #get user id from session

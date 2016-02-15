@@ -43,29 +43,6 @@ def load_users():
     db.session.commit()
 
 
-# def load_studios():
-#     """Adds studios into database"""
-
-#     print "Studios"
-
-#     Studio.query.delete()
-
-#     # Read studio file and insert data
-#     for row in open("seed_data/studios.txt"):
-#         row = row.rstrip()
-#         name, address, class_type, yelp_rating, website_url = row.split(",")
-
-#         studio = Studio(name=name,
-#                         address=address,
-#                         class_type=class_type,
-#                         yelp_rating=yelp_rating,
-#                         website_url=website_url)
-
-#         #Add studio to database
-#         db.session.add(studio)
-
-#     db.session.commit()
-
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""
 
@@ -73,7 +50,7 @@ def set_val_user_id():
     result = db.session.query(func.max(User.user_id)).one()
     max_id = int(result[0])
 
-    # Set the value for the next user_id to be max_id + 1
+    # Set the value for the next user id to be one more than the max id
     query = "SELECT setval('users_user_id_seq', :new_id)"
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
@@ -87,5 +64,5 @@ if __name__ == "__main__":
 
     # Import different types of data
     load_users()
-    # load_studios()
+
 
