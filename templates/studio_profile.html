@@ -60,60 +60,41 @@
 
     <script>
 
-    function favorite() {
-        if ($('#favorite').css('color') !== 'red') {
-            function handleFavorite(evt) {
+        function checkFavorite(evt) {
             var data = {
                         "studio_id": $("#favorite").data('id'),
                         };
-            $.post('/favorite/studio', data, function (data) {
-                $('#favorite-studio').text('You favorited this!');
-                $('#favorite').css('color', 'red');
-                });
-            }
+          $.get('/check-if-favorite', function (results) {
+                if (results == "true") {
+                    function removeFavorite(evt) {
+                        var data = {
+                           "studio_id": $("#favorite").data('id')
+                            };
+                    $.post('/unfavorite/studio', data, function (data) {
+                        $('#favorite-studio').text('You unfavorited this.');
+                        $('#favorite').css('color', '');
+                        });  
+                    }
+                }
+                else {
+                    function handleFavorite(evt) {
+                        var data = {
+                            "studio_id": $("#favorite").data('id'),
+                            };
+                    $.post('/favorite/studio', data, function (data) {
+                        $('#favorite-studio').text('You favorited this!');
+                        $('#favorite').css('color', 'red');
+                        });
+                    }
+                }
+          });
         }
-        else {
-            function removeFavorite(evt) {
-            var data = {
-                       "studio_id": $("#favorite").data('id')
-                        };
-            $.post('/unfavorite/studio', data, function (data) {
-                $('#favorite-studio').text('You unfavorited this.')      
-                $('#favorite').css('color', '');
-                });  
-            }
-        }
-    }
-
-        // function handleFavorite(evt) {
-        //     var data = {
-        //                 "studio_id": $("#favorite").data('id'),
-        //                 };
-        //   $.post('/favorite/studio', data, function (data) {
-        //     $('#favorite-studio').text('You favorited this!');
-        //     $('#favorite').css('color', 'red');
-        //   });
-        // }
 
 
-        // function removeFavorite(evt) {
-        //     var data = {
-        //                "studio_id": $("#favorite").data('id')
-        //                 };
-        //   $.post('/unfavorite/studio', data, function (data) {
-        //     $('#favorite-studio').text('You unfavorited this.')       
-        //     $('#favorite').css('color', '');
-        //   });  
-        // }
-
-        // $('#favorite').toggle(handleFavorite, removeFavorite);
-
-        // $('#favorite').toggle(handleFavorite);
-
-
-        $('#favorite').on('click', favorite);
+        $('#favorite').on('click', checkFavorite);
 
     
     </script>
+</body>
 
 {% endblock %}

@@ -215,12 +215,12 @@ def show_review_form(studio_id):
 def process_review_form():
     """Add input from review form to db and update overall scores"""
 
-    overall = request.form.get("overall_rating")
-    amenities = request.form.get("amenities_rating")
-    cleanliness = request.form.get("cleanliness_rating")
-    class_size = request.form.get("class_size_rating")
-    schedule = request.form.get("schedule_rating")
-    class_pace = request.form.get("pace_rating")
+    overall_rating = request.form.get("overall_rating")
+    amenities_rating = request.form.get("amenities_rating")
+    cleanliness_rating = request.form.get("cleanliness_rating")
+    class_size_rating = request.form.get("class_size_rating")
+    schedule_rating = request.form.get("schedule_rating")
+    pace_rating = request.form.get("pace_rating")
     studio_id = request.form.get("studio_id")
 
     #establish user id and studio id foreign keys
@@ -231,7 +231,12 @@ def process_review_form():
     #if not, instansiate new review
     existing_review = Review.query.filter(Review.user_id == user_id, Review.studio_id == studio_id).one()
     if not existing_review:
-        review = Review(user_id=user_id, studio_id=studio_id, )
+        review = Review(user_id=user_id, studio_id=studio_id,
+                        overall_rating=overall_rating,
+                        cleanliness_rating=cleanliness_rating,
+                        class_size_rating=class_size_rating,
+                        schedule_rating=schedule_rating,
+                        pace_rating=pace_rating)
         db.session.add(review)
         db.session.commit()
 
@@ -246,9 +251,29 @@ def process_review_form():
     return redirect('/studios/' + str(studio_id))
 
 
+@app.route('/check-if-favorite', methods=["GET"])
+def check_favorite_status():
+    """Checks if user has favorited studio"""
+
+    #get studio info from ajax request
+    studio_id = request.args.get("studio_id")
+
+    #get user id from session
+    user_id = session['user']
+
+    #instantiate favorite and add/commit to db
+    favorite = Favorite.query.filter(Favorite.user_id == user_id,
+                                     Favorite.studio_id == studio_id).first()
+
+    if favorite:
+        return "true"
+    else:
+        return "false"
+
+
 @app.route('/favorite/studio', methods=["POST"])
 def favorite_studio():
-    """Add favorite to db and user profile"""
+    """Add favorite to database"""
 
     #get studio info from ajax request
     studio_id = request.form.get("studio_id")
@@ -260,6 +285,7 @@ def favorite_studio():
     favorite = Favorite.query.filter(Favorite.user_id == user_id, 
                                      Favorite.studio_id == studio_id).all()
 
+    #add favorite to database if it doesn't already exist
     if not favorite:
         favorite = Favorite(user_id=user_id, studio_id=studio_id)
         db.session.add(favorite)
@@ -272,7 +298,21 @@ def favorite_studio():
 
 @app.route('/unfavorite/studio', methods=["POST"])
 def unfavorite_studio():
-    """Remove favorite from db and user profile"""
+    """Remove favorite from database"""
+
+    studio_id = request.form.get("studio_id")
+
+    user_id = session['user']
+
+    favorite = Favorite.query.filter(Favorite.user_id == user_id, 
+                                     Favorite.studio_id == studio_id).one()
+
+    db.session.delete(favorite)
+    db.session.commit()
+
+    session['favorite'] = None
+
+    return jsonify({'unfavorite_studio': 'success'})
 
 
 if __name__ == "__main__":
