@@ -65,7 +65,8 @@
                         "studio_id": $("#favorite").data('id'),
                         };
           $.get('/check-if-favorite', function (results) {
-                if (results == "true") {
+            debugger
+                if (results === "true") {
                     function removeFavorite(evt) {
                         var data = {
                            "studio_id": $("#favorite").data('id')

@@ -221,6 +221,10 @@ def process_review_form():
     class_size_rating = request.form.get("class_size_rating")
     schedule_rating = request.form.get("schedule_rating")
     pace_rating = request.form.get("pace_rating")
+
+    name = request.form.get("name")
+    rating = request.form.get("instructor_rating")
+
     studio_id = request.form.get("studio_id")
 
     #establish user id and studio id foreign keys
@@ -229,7 +233,8 @@ def process_review_form():
     #check if user already reviewed this studio
     #if already did, update ratings
     #if not, instansiate new review
-    existing_review = Review.query.filter(Review.user_id == user_id, Review.studio_id == studio_id).one()
+    existing_review = Review.query.filter(Review.user_id == user_id, Review.studio_id == studio_id).first()
+
     if not existing_review:
         review = Review(user_id=user_id, studio_id=studio_id,
                         overall_rating=overall_rating,
@@ -239,14 +244,49 @@ def process_review_form():
                         pace_rating=pace_rating)
         db.session.add(review)
         db.session.commit()
+    if existing_review:
+        existing_review.overall_rating = overall_rating
+        existing_review.cleanliness_rating = cleanliness_rating
+        existing_review.class_size_rating = class_size_rating
+        existing_review.schedule_rating = schedule_rating
+        existing_review.pace_rating = pace_rating
+        db.session.commit()
+
+    #check if this instructor exists in the database
+    #if so, use id for review
+    #if not, add to database
+    instructor = Instructor.query.filter(Instructor.name == name,
+    Instructor.studio_id == studio_id).first()
+
+    if not instructor:
+        instructor = Instructor(studio_id=studio_id, name=name)
+        db.session.add(instructor)
+        db.session.commit()
+
+    instructor_id = instructor.instructor_id
 
     #check if user already reviewed this instructor
     #if so, update rating
     #if not, instantiate instructor review
-    instructor_review = InstructorReview()
 
-    #check if instructor exists
-    #if exists, update rating
+    existing_instructor_review = InstructorReview.query.filter
+    (InstructorReview.user_id == user_id, InstructorReview.studio_id == studio_id).first()
+
+    if not existing_instructor_review:
+        instructor_review = InstructorReview(instructor_id=instructor_id,
+                                             user_id=user_id,
+                                             rating=rating)
+        db.session.add(instructor_review)
+        db.session.commit()
+    if existing_instructor_review:
+        existing_instructor_review.rating = rating
+        db.session.commit()
+
+    #update studios overall scores in db with this user's scores
+    studio = Studio.query.filter(Studio.studio_id=studio_id).first()
+
+    
+
 
     return redirect('/studios/' + str(studio_id))
 
