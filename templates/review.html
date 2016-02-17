@@ -3,7 +3,7 @@
 
 <h2>Write a review!</h2>
 
-<form action="/review/studio" method="POST">
+<form action="/review/studio" id="reviewform" method="POST">
     <input type="hidden" name="studio_id" value={{ id }}>
     <fieldset>
         <legend>Give an overall rating:</legend>
@@ -69,5 +69,20 @@
     
 
 </form>
+
+<script>
+$('#reviewform').on('submit', function (evt) {
+    var allInputs = reviewform.getElementsByTagName('input');
+    var input, i;
+
+    for(i = 0; input = allInputs[i]; i++) {
+        if(!input.value) {
+        alert("Please select a value for each field");
+        evt.preventDefault();
+        }
+    }
+    
+});
+</script>
 
 {% endblock %}

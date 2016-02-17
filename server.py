@@ -10,6 +10,8 @@ from model import connect_to_db, db, User, Review, Studio, Favorite, Instructor,
 
 import os
 
+from sqlalchemy import func
+
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
@@ -228,6 +230,7 @@ def process_review_form():
 
     studio_id = request.form.get("studio_id")
 
+
     #establish user id and studio id foreign keys
     user_id = session['user']
 
@@ -239,6 +242,7 @@ def process_review_form():
     if not existing_review:
         review = Review(user_id=user_id, studio_id=studio_id,
                         overall_rating=overall_rating,
+                        amenities_rating=amenities_rating,
                         cleanliness_rating=cleanliness_rating,
                         class_size_rating=class_size_rating,
                         schedule_rating=schedule_rating,
@@ -270,8 +274,7 @@ def process_review_form():
     #if so, update rating
     #if not, instantiate instructor review
 
-    existing_instructor_review = InstructorReview.query.filter
-    (InstructorReview.user_id == user_id, InstructorReview.studio_id == studio_id).first()
+    existing_instructor_review = InstructorReview.query.filter(InstructorReview.user_id == user_id, InstructorReview.instructor_id == instructor_id).first()
 
     if not existing_instructor_review:
         instructor_review = InstructorReview(instructor_id=instructor_id,
@@ -284,7 +287,32 @@ def process_review_form():
         db.session.commit()
 
     #update studios overall scores in db with this user's scores
+
+    #get highest review_id to use as number of reviews for average
+    max = db.session.query(func.max(Review.review_id)).one()
+
+    import pdb
+    pdb.set_trace()
+
     studio = Studio.query.filter(Studio.studio_id == studio_id).first()
+    old_overall_rating = studio.overall_rating
+
+    all_reviews = Review.query.filter(Review.studio_id == studio_id).all()
+
+    #if this studio has already been reviewed, calculate the average
+    #if not, add this first review to studio db
+    if len(all_reviews) > 1:
+        studio.overall_rating = (float(str(old_overall_rating)) + float(str(overall_rating)))/max
+        db.commit()
+    else:
+        studio.overall_rating = overall_rating
+        studio.amenities_rating = amenities_rating
+        studio.cleanliness_rating = cleanliness_rating
+        studio.class_size_rating = class_size_rating
+        studio.schedule_rating = schedule_rating
+        studio.pace_rating = pace_rating
+        db.commit()
+
 
     return redirect('/studios/' + str(studio_id))
 

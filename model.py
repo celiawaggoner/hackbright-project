@@ -2,6 +2,8 @@
 
 from flask_sqlalchemy import SQLAlchemy
 
+from sqlalchemy import func
+
 # Connect to the PostgreSQL database
 db = SQLAlchemy()
 
@@ -37,14 +39,13 @@ class Studio(db.Model):
     # studio_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     studio_id = db.Column(db.String(150), primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    address = db.Column(db.String(200), nullable=True)
+    # address = db.Column(db.String(200), nullable=True)
     zipcode = db.Column(db.String(25), nullable=False)
-    website_url = db.Column(db.String(100), nullable=True)
-    class_type = db.Column(db.String(150), nullable=True)
+    # class_type = db.Column(db.String(150), nullable=True)
     top_instructor = db.Column(db.String(50), nullable=True)
     top_class = db.Column(db.String(50), nullable=True)
-    yelp_rating_url = db.Column(db.String(100), nullable=True)
-    yelp_image_url = db.Column(db.String(100), nullable=True)
+    # yelp_rating_url = db.Column(db.String(100), nullable=True)
+    # yelp_image_url = db.Column(db.String(100), nullable=True)
     overall_rating = db.Column(db.Integer, nullable=True)
     amenities_rating = db.Column(db.Integer, nullable=True)
     cleanliness_rating = db.Column(db.Integer, nullable=True)
@@ -127,7 +128,7 @@ class Instructor(db.Model):
 class InstructorReview(db.Model):
     """User reviews of instructors"""
 
-    __tablename__ = "instructor-reviews"
+    __tablename__ = "instructorreviews"
 
     instructor_review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     instructor_id = db.Column(db.Integer, db.ForeignKey("instructors.instructor_id"), nullable=False)

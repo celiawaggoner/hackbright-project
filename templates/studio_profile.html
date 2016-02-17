@@ -60,36 +60,29 @@
 
     <script>
 
-        function checkFavorite(evt) {
+        //send the studio id to the server and query the db to check if
+        //the button has already been favorited...apply styling and
+        //send info to route for adding/removing from db
+       function checkFavorite(evt) {
             var data = {
                         "studio_id": $("#favorite").data('id'),
                         };
           $.get('/check-if-favorite', data, function (results) {
             // debugger
                 if (results == "false") {
-                    // function handleFavorite(evt) {
-                    //     var data = {
-                    //         "studio_id": $("#favorite").data('id'),
-                    //         };
                     $.post('/favorite/studio', data, function (data) {
                         $('#favorite-studio').text('You favorited this!');
                         $('#favorite').css('color', 'red');
                         });
                     }
-                // }
                 else if (results == "true") {
-                  // function removeFavorite(evt) {
-                  //       var data = {
-                  //          "studio_id": $("#favorite").data('id')
-                  //           };
                     $.post('/unfavorite/studio', data, function (data) {
                         $('#favorite-studio').text('You unfavorited this.');
                         $('#favorite').css('color', '');
                         });  
                     }
-                // }
-          });
-        }
+                });
+            }
 
 
         $('#favorite').on('click', checkFavorite);
