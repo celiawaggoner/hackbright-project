@@ -177,7 +177,7 @@ def show_studio_profile(studio_id):
     """Show studio profile and if a user is logged in,
         let them favorite the studio or add a review."""
 
-    studio_id = studio_id
+    id = studio_id
     studio = Studio.query.filter(Studio.studio_id == studio_id).one()
     name = studio.name
     zipcode = studio.zipcode
@@ -199,7 +199,8 @@ def show_studio_profile(studio_id):
     favorited = Favorite.query.filter(Favorite.user_id == user_id, Favorite.studio_id == studio_id).first()
 
     return render_template("studio_profile.html", studios=studios,
-                            name=name, zipcode=zipcode, favorited=favorited)
+                            name=name, zipcode=zipcode, favorited=favorited,
+                            id=id)
 
 
 @app.route('/write-a-review/<studio_id>')
@@ -283,10 +284,7 @@ def process_review_form():
         db.session.commit()
 
     #update studios overall scores in db with this user's scores
-    studio = Studio.query.filter(Studio.studio_id=studio_id).first()
-
-    
-
+    studio = Studio.query.filter(Studio.studio_id == studio_id).first()
 
     return redirect('/studios/' + str(studio_id))
 
@@ -295,8 +293,13 @@ def process_review_form():
 def check_favorite_status():
     """Checks if user has favorited studio"""
 
+    # import pdb
+    # pdb.set_trace()
+
     #get studio info from ajax request
     studio_id = request.args.get("studio_id")
+
+    studio_id = str(studio_id)
 
     #get user id from session
     user_id = session['user']
@@ -305,10 +308,10 @@ def check_favorite_status():
     favorite = Favorite.query.filter(Favorite.user_id == user_id,
                                      Favorite.studio_id == studio_id).first()
 
-    if favorite:
-        return "true"
-    else:
+    if not favorite:
         return "false"
+    else:
+        return "true"
 
 
 @app.route('/favorite/studio', methods=["POST"])

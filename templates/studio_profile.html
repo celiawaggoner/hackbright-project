@@ -31,12 +31,12 @@
 </div>
 
 {% if session.user %}
-<a href="/write-a-review/{{ studio.id }}"><button type="button">Review this studio</button></a>
+<a href="/write-a-review/{{ id }}"><button type="button">Review this studio</button></a>
 
 
 {% if favorited %}
 <div id="favorite-div">
-    <button style="color:red" id="favorite" data-id={{ studio.id }}>
+    <button style="color:red" id="favorite" data-id={{ id }}>
         <span class="glyphicon glyphicon-heart"></span> Favorite
     </button>
     <span id="notes"></span>
@@ -46,7 +46,7 @@
 
 {% if not favorited %}
 <div id="favorite-div">
-    <button id="favorite" data-id={{ studio.id }}>
+    <button id="favorite" data-id={{ id }}>
         <span class="glyphicon glyphicon-heart"></span> Favorite
     </button>
     <span id="notes"></span>
@@ -64,30 +64,30 @@
             var data = {
                         "studio_id": $("#favorite").data('id'),
                         };
-          $.get('/check-if-favorite', function (results) {
-            debugger
-                if (results === "true") {
-                    function removeFavorite(evt) {
-                        var data = {
-                           "studio_id": $("#favorite").data('id')
-                            };
-                    $.post('/unfavorite/studio', data, function (data) {
-                        $('#favorite-studio').text('You unfavorited this.');
-                        $('#favorite').css('color', '');
-                        });  
-                    }
-                }
-                else {
-                    function handleFavorite(evt) {
-                        var data = {
-                            "studio_id": $("#favorite").data('id'),
-                            };
+          $.get('/check-if-favorite', data, function (results) {
+            // debugger
+                if (results == "false") {
+                    // function handleFavorite(evt) {
+                    //     var data = {
+                    //         "studio_id": $("#favorite").data('id'),
+                    //         };
                     $.post('/favorite/studio', data, function (data) {
                         $('#favorite-studio').text('You favorited this!');
                         $('#favorite').css('color', 'red');
                         });
                     }
-                }
+                // }
+                else if (results == "true") {
+                  // function removeFavorite(evt) {
+                  //       var data = {
+                  //          "studio_id": $("#favorite").data('id')
+                  //           };
+                    $.post('/unfavorite/studio', data, function (data) {
+                        $('#favorite-studio').text('You unfavorited this.');
+                        $('#favorite').css('color', '');
+                        });  
+                    }
+                // }
           });
         }
 
@@ -96,6 +96,5 @@
 
     
     </script>
-</body>
 
 {% endblock %}
