@@ -36,16 +36,11 @@ class Studio(db.Model):
 
     __tablename__ = "studios"
 
-    # studio_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     studio_id = db.Column(db.String(150), primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    # address = db.Column(db.String(200), nullable=True)
     zipcode = db.Column(db.String(25), nullable=False)
-    # class_type = db.Column(db.String(150), nullable=True)
     top_instructor = db.Column(db.String(50), nullable=True)
     top_class = db.Column(db.String(50), nullable=True)
-    # yelp_rating_url = db.Column(db.String(100), nullable=True)
-    # yelp_image_url = db.Column(db.String(100), nullable=True)
     overall_rating = db.Column(db.Integer, nullable=True)
     amenities_rating = db.Column(db.Integer, nullable=True)
     cleanliness_rating = db.Column(db.Integer, nullable=True)
@@ -59,6 +54,7 @@ class Studio(db.Model):
 
         return "<Studio studio_id=%s name=%s>" % (self.studio_id, self.name)
 
+    #Define relationship to instructors 
     instructors = db.relationship("Instructor", backref="studio")
 
 
@@ -69,7 +65,6 @@ class Review(db.Model):
 
     review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    # studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
     studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
     overall_rating = db.Column(db.Integer, nullable=True)
     amenities_rating = db.Column(db.Integer, nullable=True)
@@ -101,7 +96,6 @@ class Favorite(db.Model):
     favorite_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
     studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
-    # studio_name = db.Column(db.String(100), db.ForeignKey("studios.name"), nullable=False)
     notes = db.Column(db.String(500), nullable=True)
 
     #Define relationship to user
@@ -114,7 +108,6 @@ class Instructor(db.Model):
     __tablename__ = "instructors"
 
     instructor_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    # studio_id = db.Column(db.Integer, db.ForeignKey("studios.studio_id"), nullable=False)
     studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
     name = db.Column(db.String(50), nullable=False)
 
@@ -132,17 +125,13 @@ class InstructorReview(db.Model):
     instructor_review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     instructor_id = db.Column(db.Integer, db.ForeignKey("instructors.instructor_id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    # studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
     #Define relationship to user
     user = db.relationship("User", backref="instructorreviews")
 
+    #Define relationship to instructor 
     instructor = db.relationship("Instructor", backref="instructorreviews")
-
-
-
-    # studio = db.relationship("Studio", backref="instructor-reviews")
 
 
 ##############################################################################

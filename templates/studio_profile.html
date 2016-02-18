@@ -21,7 +21,8 @@
 
 
 <div>
-    <h4>Ratings</h4>
+    <h4>Ratings:</h4>
+    <h6>Review count: {{ review_count }}</h6>
     <p>Overall score: {{ studio_db.overall_rating }}</p>
     <p>Amenities score: {{ studio_db.amenities_rating }}</p>
     <p>Cleanliness score: {{ studio_db.cleanliness_rating }}</p>
@@ -33,12 +34,7 @@
 </div>
 
 <div>
-    <h4>Top Instructors</h4>
-    <p></p>
-</div>
-
-<div>
-    <h4>Reviews</h4>
+    <h4>Studio Reviews:</h4>
     <ul>
     {% for review in reviews %}
     <li>Overall rating: {{ review.overall_rating }},
@@ -53,14 +49,23 @@
 </div>
 
 <div>
-    <h4>Instructor Reviews</h4>
+    <h4>Top Instructors:</h4>
+    <p></p>
+</div>
+
+<div>
+    <h4>Top Classes:</h4>
+    <p></p>
+</div>
+
+<div>
+    <h4>Instructor Reviews:</h4>
     <ul>
     {% for instructor in instructors %}
-        <li>{{ instructor.name }}<li>
-    {% endfor %} 
-    {% for review in instructorreviews %}
-        <li>{{ review.rating }}</li>
+        {% for review in instructor.instructorreviews %}
+        <li>{{ review.instructor.name }}, {{ review.rating }}</li>
         {% endfor %}
+    {% endfor %}
     </ul>
 </div>
 {% if session.user %}

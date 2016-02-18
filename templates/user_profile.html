@@ -16,10 +16,10 @@
 </div>
 
 <div>
-    <h5>My Reviews</h5>
+    <h5>My Reviews:</h5>
     {% for review in reviews %}
     <ul>
-        <li style="font-weight:bold">{{ review.studio_id }}</li>
+        <li style="font-weight:bold"><a href="/studios/{{ review.studio_id }}">{{ review.studio_id }}</a></li>
         <li>Overall rating: {{ review.overall_rating }}</li>
         <li>Amenities rating: {{ review.amenities_rating }}</li>
         <li>Cleanliness rating: {{ review.cleanliness_rating }}</li>
@@ -28,6 +28,7 @@
         <li>Pace rating: {{ review.pace_rating }}</li>
     </ul>
     {% endfor %}
+    <h5>My Instructor Reviews:</h5>
     {% for review in instructor_reviews %}
     <ul>
         <li>{{ review.instructor.name }}</li>
@@ -35,6 +36,7 @@
         <li>{{ review.rating }}</li>
     </ul>
     {% endfor %}
+    
 </div>
 
 {% endblock %}

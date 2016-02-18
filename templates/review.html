@@ -5,6 +5,7 @@
 
 <form action="/review/studio" id="reviewform" method="POST">
     <input type="hidden" name="studio_id" value={{ id }}>
+    <div id="required">
     <fieldset>
         <legend>Give an overall rating:</legend>
             <input type="radio" name="overall_rating" value="1">1
@@ -49,9 +50,9 @@
             <input type="radio" name="pace_rating" value="3">Decent workout
             <input type="radio" name="pace_rating" value="5">I was dying!
     </fieldset>
-
+    </div>
     <fieldset>
-        <legend>Rate the instructors:</legend>
+        <legend>Share more about your experience:</legend>
         <label>Who was your instructor?</label>
         <input type="text" name="name" value="name">
         <p>What'd you think?</p>
@@ -60,6 +61,8 @@
         <input type="radio" name="instructor_rating" value="3">3
         <input type="radio" name="instructor_rating" value="4">4
         <input type="radio" name="instructor_rating" value="5">5
+        <p><label>What's been your favorite class or class time?</label></p>
+        <input type="text" name="fav_class" value="favorite class">
 <!--Need to figure out how to show more forms to review multiple instructors-->
     </fieldset>
 
@@ -75,6 +78,7 @@
 //prevent form submission if fields are not filled out
 
 // $('#reviewform').on('submit', function (evt) {
+//     var required = reviewform.getElementById("#required");
 //     var allInputs = reviewform.getElementsByTagName('input');
 //     var input, i;
 

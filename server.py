@@ -135,7 +135,7 @@ def show_user_profile(user_id):
                            last_name=last_name, city=city, state=state,
                            favorites=favorites, reviews=reviews,
                            instructor_reviews=instructor_reviews)
-                
+              
 
 @app.route('/logout')
 def logout():
@@ -210,17 +210,15 @@ def show_studio_profile(studio_id):
 
     reviews = studio.reviews
 
-    instructors = studio_db.instructors
+    review_count = len(reviews)
 
-    for instructor in instructors:
-        instructorreviews = instructor.instructorreviews
-
+    instructors = studio_db.instructors      
 
     return render_template("studio_profile.html", studios=studios,
                            name=name, zipcode=zipcode, favorited=favorited,
                            id=id, studio_db=studio_db, reviews=reviews,
                            instructors=instructors,
-                           instructorreviews=instructorreviews)
+                           review_count=review_count)
 
 
 @app.route('/write-a-review/<studio_id>')
@@ -246,6 +244,8 @@ def process_review_form():
     name = request.form.get("name")
     rating = request.form.get("instructor_rating")
 
+    favorite_class = request.form.get("fav_class")
+
     studio_id = request.form.get("studio_id")
 
 
@@ -264,7 +264,8 @@ def process_review_form():
                         cleanliness_rating=cleanliness_rating,
                         class_size_rating=class_size_rating,
                         schedule_rating=schedule_rating,
-                        pace_rating=pace_rating)
+                        pace_rating=pace_rating,
+                        favorite_class=favorite_class)
         db.session.add(review)
         db.session.commit()
     if existing_review:
@@ -273,6 +274,7 @@ def process_review_form():
         existing_review.class_size_rating = class_size_rating
         existing_review.schedule_rating = schedule_rating
         existing_review.pace_rating = pace_rating
+        existing_review.favorite_class = favorite_class
         db.session.commit()
 
     #check if this instructor exists in the database
@@ -325,6 +327,7 @@ def process_review_form():
     old_pace_rating = studio.pace_rating
 
     all_reviews = studio.reviews
+
 
     #if this studio has already been reviewed, calculate the average
     #if not, add this first review to studio db
