@@ -39,6 +39,17 @@
 
 <div>
     <h4>Reviews</h4>
+    <ul>
+    {% for review in reviews %}
+    <li>Overall rating: {{ review.overall_rating }},
+        Amenities rating: {{ review.amenities_rating }},
+        Cleanliness rating: {{ review.cleanliness_rating }},
+        Class size rating: {{ review.class_size_rating }},
+        Schedule rating: {{ review.schedule_rating }},
+        Pace rating: {{ review.pace_rating }}
+    </li>
+    {% endfor %}
+    </ul>
 </div>
 {% if session.user %}
 <a href="/write-a-review/{{ id }}"><button type="button">Review this studio</button></a>

@@ -15,4 +15,19 @@
     </ul>
 </div>
 
+<div>
+    <h5>My Reviews</h5>
+    {% for review in reviews %}
+    <ul>
+        <li style="font-weight:bold">{{ review.studio_id }}</li>
+        <li>Overall rating: {{ review.overall_rating }}</li>
+        <li>Amenities rating: {{ review.amenities_rating }}</li>
+        <li>Cleanliness rating: {{ review.cleanliness_rating }}</li>
+        <li>Class size rating: {{ review.class_size_rating }}</li>
+        <li>Schedule rating: {{ review.schedule_rating }}</li>
+        <li>Pace rating: {{ review.pace_rating }}</li>
+    </ul>
+    {% endfor %}
+</div>
+
 {% endblock %}

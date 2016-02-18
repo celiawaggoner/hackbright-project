@@ -127,9 +127,11 @@ def show_user_profile(user_id):
     #query db for all of user's favorites
     favorites = user.favorites
 
+    reviews = user.reviews
+
     return render_template("user_profile.html", first_name=first_name,
                            last_name=last_name, city=city, state=state,
-                           favorites=favorites)
+                           favorites=favorites, reviews=reviews)
                 
 
 @app.route('/logout')
@@ -203,9 +205,11 @@ def show_studio_profile(studio_id):
     #get studio from db
     studio_db = Studio.query.filter(Studio.studio_id == studio_id).one()
 
+    reviews = studio_db.reviews
+
     return render_template("studio_profile.html", studios=studios,
                            name=name, zipcode=zipcode, favorited=favorited,
-                           id=id, studio_db=studio_db)
+                           id=id, studio_db=studio_db, reviews=reviews)
 
 
 @app.route('/write-a-review/<studio_id>')
