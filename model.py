@@ -59,6 +59,8 @@ class Studio(db.Model):
 
         return "<Studio studio_id=%s name=%s>" % (self.studio_id, self.name)
 
+    instructors = db.relationship("Instructor", backref="studio")
+
 
 class Review(db.Model):
     """User reviews of studios"""
@@ -116,9 +118,6 @@ class Instructor(db.Model):
     studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
     name = db.Column(db.String(50), nullable=False)
 
-    #Define relationship to studio
-    studio = db.relationship("Studio", backref="studios")
-
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -137,7 +136,11 @@ class InstructorReview(db.Model):
     rating = db.Column(db.Integer, nullable=False)
 
     #Define relationship to user
-    user = db.relationship("User", backref="instructor-reviews")
+    user = db.relationship("User", backref="instructorreviews")
+
+    instructor = db.relationship("Instructor", backref="instructorreviews")
+
+
 
     # studio = db.relationship("Studio", backref="instructor-reviews")
 

@@ -129,9 +129,12 @@ def show_user_profile(user_id):
 
     reviews = user.reviews
 
+    instructor_reviews = user.instructorreviews
+
     return render_template("user_profile.html", first_name=first_name,
                            last_name=last_name, city=city, state=state,
-                           favorites=favorites, reviews=reviews)
+                           favorites=favorites, reviews=reviews,
+                           instructor_reviews=instructor_reviews)
                 
 
 @app.route('/logout')
@@ -205,11 +208,19 @@ def show_studio_profile(studio_id):
     #get studio from db
     studio_db = Studio.query.filter(Studio.studio_id == studio_id).one()
 
-    reviews = studio_db.reviews
+    reviews = studio.reviews
+
+    instructors = studio_db.instructors
+
+    for instructor in instructors:
+        instructorreviews = instructor.instructorreviews
+
 
     return render_template("studio_profile.html", studios=studios,
                            name=name, zipcode=zipcode, favorited=favorited,
-                           id=id, studio_db=studio_db, reviews=reviews)
+                           id=id, studio_db=studio_db, reviews=reviews,
+                           instructors=instructors,
+                           instructorreviews=instructorreviews)
 
 
 @app.route('/write-a-review/<studio_id>')

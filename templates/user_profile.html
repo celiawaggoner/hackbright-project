@@ -28,6 +28,13 @@
         <li>Pace rating: {{ review.pace_rating }}</li>
     </ul>
     {% endfor %}
+    {% for review in instructor_reviews %}
+    <ul>
+        <li>{{ review.instructor.name }}</li>
+        <li>{{ review.instructor.studio_id }}</li>
+        <li>{{ review.rating }}</li>
+    </ul>
+    {% endfor %}
 </div>
 
 {% endblock %}
