@@ -22,14 +22,24 @@
 
 <div>
     <h4>Ratings</h4>
-    <p>Overall score: </p>
-    <p>Amenities score: </p>
-    <p>Cleanliness score: </p>
-    <p>Class size score: </p>
-    <p>Schedule score: </p>
-    <p>Pace score: </p>
+    <p>Overall score: {{ studio_db.overall_rating }}</p>
+    <p>Amenities score: {{ studio_db.amenities_rating }}</p>
+    <p>Cleanliness score: {{ studio_db.cleanliness_rating }}</p>
+    <p>Class size score: {{ studio_db.class_size_rating }}</p>
+    <p>Schedule score: {{ studio_db.schedule_rating }}</p>
+    <p>What people are saying about the pace of this class: 
+    {{ studio_db.pace_rating }}
+    </p>
 </div>
 
+<div>
+    <h4>Top Instructors</h4>
+    <p></p>
+</div>
+
+<div>
+    <h4>Reviews</h4>
+</div>
 {% if session.user %}
 <a href="/write-a-review/{{ id }}"><button type="button">Review this studio</button></a>
 

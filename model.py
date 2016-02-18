@@ -133,10 +133,13 @@ class InstructorReview(db.Model):
     instructor_review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     instructor_id = db.Column(db.Integer, db.ForeignKey("instructors.instructor_id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    # studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
     #Define relationship to user
     user = db.relationship("User", backref="instructor-reviews")
+
+    # studio = db.relationship("Studio", backref="instructor-reviews")
 
 
 ##############################################################################

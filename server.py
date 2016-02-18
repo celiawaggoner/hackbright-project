@@ -152,7 +152,7 @@ def process_search():
     params = {
         'term': 'Fitness & Instruction',
         'location': zipcode,
-        'limit': 20
+        'limit': 10
     }
 
     #query the Search API
@@ -200,9 +200,12 @@ def show_studio_profile(studio_id):
 
     favorited = Favorite.query.filter(Favorite.user_id == user_id, Favorite.studio_id == studio_id).first()
 
+    #get studio from db
+    studio_db = Studio.query.filter(Studio.studio_id == studio_id).one()
+
     return render_template("studio_profile.html", studios=studios,
-                            name=name, zipcode=zipcode, favorited=favorited,
-                            id=id)
+                           name=name, zipcode=zipcode, favorited=favorited,
+                           id=id, studio_db=studio_db)
 
 
 @app.route('/write-a-review/<studio_id>')
@@ -277,10 +280,10 @@ def process_review_form():
     existing_instructor_review = InstructorReview.query.filter(InstructorReview.user_id == user_id, InstructorReview.instructor_id == instructor_id).first()
 
     if not existing_instructor_review:
-        instructor_review = InstructorReview(instructor_id=instructor_id,
-                                             user_id=user_id,
-                                             rating=rating)
-        db.session.add(instructor_review)
+        instructorreview = InstructorReview(instructor_id=instructor_id,
+                                            user_id=user_id,
+                                            rating=rating)
+        db.session.add(instructorreview)
         db.session.commit()
     if existing_instructor_review:
         existing_instructor_review.rating = rating
@@ -289,21 +292,35 @@ def process_review_form():
     #update studios overall scores in db with this user's scores
 
     #get highest review_id to use as number of reviews for average
-    max = db.session.query(func.max(Review.review_id)).one()
+    
+    # import pdb
+    # pdb.set_trace()
 
-    import pdb
-    pdb.set_trace()
+    max = db.session.query(func.max(Review.review_id)).one()
+    for item in max:
+        max_id = item
 
     studio = Studio.query.filter(Studio.studio_id == studio_id).first()
+    #get studio ratings that are currently in db
     old_overall_rating = studio.overall_rating
+    old_amenities_rating = studio.amenities_rating
+    old_cleanliness_rating = studio.cleanliness_rating
+    old_class_size_rating = studio.class_size_rating
+    old_schedule_rating = studio.schedule_rating
+    old_pace_rating = studio.pace_rating
 
-    all_reviews = Review.query.filter(Review.studio_id == studio_id).all()
+    all_reviews = studio.reviews
 
     #if this studio has already been reviewed, calculate the average
     #if not, add this first review to studio db
     if len(all_reviews) > 1:
-        studio.overall_rating = (float(str(old_overall_rating)) + float(str(overall_rating)))/max
-        db.commit()
+        studio.overall_rating = ((float(str(old_overall_rating))) + (float(str(overall_rating)))) / float(str(max_id))
+        studio.amenities_rating = ((float(str(old_amenities_rating))) + (float(str(amenities_rating)))) / float(str(max_id))
+        studio.cleanliness_rating = ((float(str(old_cleanliness_rating))) + (float(str(cleanliness_rating)))) / float(str(max_id))
+        studio.class_size_rating = ((float(str(old_class_size_rating))) + (float(str(class_size_rating)))) / float(str(max_id))
+        studio.schedule_rating = ((float(str(old_schedule_rating))) + (float(str(schedule_rating)))) / float(str(max_id))
+        studio.pace_rating = ((float(str(old_pace_rating))) + (float(str(pace_rating)))) / float(str(max_id))
+        db.session.commit()
     else:
         studio.overall_rating = overall_rating
         studio.amenities_rating = amenities_rating
@@ -311,8 +328,7 @@ def process_review_form():
         studio.class_size_rating = class_size_rating
         studio.schedule_rating = schedule_rating
         studio.pace_rating = pace_rating
-        db.commit()
-
+        db.session.commit()
 
     return redirect('/studios/' + str(studio_id))
 

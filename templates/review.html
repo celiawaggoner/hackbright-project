@@ -71,18 +71,21 @@
 </form>
 
 <script>
-$('#reviewform').on('submit', function (evt) {
-    var allInputs = reviewform.getElementsByTagName('input');
-    var input, i;
 
-    for(i = 0; input = allInputs[i]; i++) {
-        if(!input.value) {
-        alert("Please select a value for each field");
-        evt.preventDefault();
-        }
-    }
+//prevent form submission if fields are not filled out
+
+// $('#reviewform').on('submit', function (evt) {
+//     var allInputs = reviewform.getElementsByTagName('input');
+//     var input, i;
+
+//     for(i = 0; input = allInputs[i]; i++) {
+//         if(!input.value) {
+//         alert("Please select a value for each field");
+//         evt.preventDefault();
+//         }
+//     }
     
-});
+// });
 </script>
 
 {% endblock %}
