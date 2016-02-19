@@ -101,6 +101,9 @@ class Favorite(db.Model):
     #Define relationship to user
     user = db.relationship("User", backref="favorites")
 
+    #Define relationship to studio
+    studio = db.relationship("Studio", backref="favorites")
+
 
 class Instructor(db.Model):
     """Instructors"""
@@ -109,7 +112,7 @@ class Instructor(db.Model):
 
     instructor_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     studio_id = db.Column(db.String(150), db.ForeignKey("studios.studio_id"), nullable=False)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -125,7 +128,7 @@ class InstructorReview(db.Model):
     instructor_review_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     instructor_id = db.Column(db.Integer, db.ForeignKey("instructors.instructor_id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    rating = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Integer, nullable=True)
 
     #Define relationship to user
     user = db.relationship("User", backref="instructorreviews")

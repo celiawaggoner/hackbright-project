@@ -9,8 +9,9 @@
     <ul>
     {% for favorite in favorites %}
     <a href="/studios/{{ favorite.studio_id }}">
-        <li>{{ favorite.studio_id }}</li>
+        <p style="font-weight:bold"><span class="glyphicon glyphicon-heart"></span> {{ favorite.studio.name }}</p>
     </a>
+    <span id="notes"></span>
     {% endfor %}
     </ul>
 </div>
@@ -19,7 +20,7 @@
     <h5>My Reviews:</h5>
     {% for review in reviews %}
     <ul>
-        <li style="font-weight:bold"><a href="/studios/{{ review.studio_id }}">{{ review.studio_id }}</a></li>
+        <li style="font-weight:bold"><a href="/studios/{{ review.studio_id }}">{{ review.studio.name }}</a></li>
         <li>Overall rating: {{ review.overall_rating }}</li>
         <li>Amenities rating: {{ review.amenities_rating }}</li>
         <li>Cleanliness rating: {{ review.cleanliness_rating }}</li>
@@ -32,11 +33,12 @@
     {% for review in instructor_reviews %}
     <ul>
         <li>{{ review.instructor.name }}</li>
-        <li>{{ review.instructor.studio_id }}</li>
+        <li>{{ review.instructor.studio.name }}</li>
         <li>{{ review.rating }}</li>
     </ul>
     {% endfor %}
     
 </div>
+
 
 {% endblock %}

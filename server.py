@@ -185,8 +185,8 @@ def show_studio_profile(studio_id):
         let them favorite the studio or add a review."""
 
     id = studio_id
-    studio = Studio.query.filter(Studio.studio_id == studio_id).one()
-    name = studio.name
+    studio = Studio.query.filter(Studio.studio_id == studio_id).first()
+    name = str(studio.name)
     zipcode = studio.zipcode
 
     user_id = session['user']
@@ -203,12 +203,20 @@ def show_studio_profile(studio_id):
     #studios is list of studios in response
     studios = response.businesses
 
+    # import pdb
+    # pdb.set_trace()
+
+    #get lat and long for google map
+    for studio in studios:
+        latitude = float(str(studio.location.coordinate.latitude))
+        longitude = float(str(studio.location.coordinate.longitude))
+
     favorited = Favorite.query.filter(Favorite.user_id == user_id, Favorite.studio_id == studio_id).first()
 
     #get studio from db
     studio_db = Studio.query.filter(Studio.studio_id == studio_id).one()
 
-    reviews = studio.reviews
+    reviews = studio_db.reviews
 
     review_count = len(reviews)
 
@@ -218,7 +226,8 @@ def show_studio_profile(studio_id):
                            name=name, zipcode=zipcode, favorited=favorited,
                            id=id, studio_db=studio_db, reviews=reviews,
                            instructors=instructors,
-                           review_count=review_count)
+                           review_count=review_count,
+                           latitude=latitude, longitude=longitude)
 
 
 @app.route('/write-a-review/<studio_id>')

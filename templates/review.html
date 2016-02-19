@@ -5,56 +5,66 @@
 
 <form action="/review/studio" id="reviewform" method="POST">
     <input type="hidden" name="studio_id" value={{ id }}>
-    <div id="required">
     <fieldset>
         <legend>Give an overall rating:</legend>
+        <div>
             <input type="radio" name="overall_rating" value="1">1
             <input type="radio" name="overall_rating" value="2">2
             <input type="radio" name="overall_rating" value="3">3
             <input type="radio" name="overall_rating" value="4">4
             <input type="radio" name="overall_rating" value="5">5
+        </div>
     </fieldset>
 
     <fieldset>
         <legend>Rate the studio:</legend>
             <p>Amenities</p>
+            <div>
             <input type="radio" name="amenities_rating" value="1">1
             <input type="radio" name="amenities_rating" value="2">2
             <input type="radio" name="amenities_rating" value="3">3
             <input type="radio" name="amenities_rating" value="4">4
             <input type="radio" name="amenities_rating" value="5">5
+            </div>
             <p>Cleanliness</p>
+            <div>
             <input type="radio" name="cleanliness_rating" value="1">1
             <input type="radio" name="cleanliness_rating" value="2">2
             <input type="radio" name="cleanliness_rating" value="3">3
             <input type="radio" name="cleanliness_rating" value="4">4
             <input type="radio" name="cleanliness_rating" value="5">5
+            </div>
     </fieldset>
 
     <fieldset>
         <legend>Rate the classes:</legend>
             <p>Class size</p>
+            <div>
             <input type="radio" name="class_size_rating" value="1">1
             <input type="radio" name="class_size_rating" value="2">2
             <input type="radio" name="class_size_rating" value="3">3
             <input type="radio" name="class_size_rating" value="4">4
             <input type="radio" name="class_size_rating" value="5">5
+            </div>
             <p>Class schedule</p>
+            <div>
             <input type="radio" name="schedule_rating" value="1">1
             <input type="radio" name="schedule_rating" value="2">2
             <input type="radio" name="schedule_rating" value="3">3
             <input type="radio" name="schedule_rating" value="4">4
             <input type="radio" name="schedule_rating" value="5">5
+            </div>
             <p>Class pace</p>
+            <div>
             <input type="radio" name="pace_rating" value="1">Barely broke a sweat
             <input type="radio" name="pace_rating" value="3">Decent workout
             <input type="radio" name="pace_rating" value="5">I was dying!
+            </div>
     </fieldset>
-    </div>
     <fieldset>
         <legend>Share more about your experience:</legend>
         <label>Who was your instructor?</label>
-        <input type="text" name="name" value="name">
+        <input type="text" name="name" placeholder="name">
         <p>What'd you think?</p>
         <input type="radio" name="instructor_rating" value="1">1
         <input type="radio" name="instructor_rating" value="2">2
@@ -62,12 +72,12 @@
         <input type="radio" name="instructor_rating" value="4">4
         <input type="radio" name="instructor_rating" value="5">5
         <p><label>What's been your favorite class or class time?</label></p>
-        <input type="text" name="fav_class" value="favorite class">
+        <input type="text" name="fav_class" placeholder="favorite class">
 <!--Need to figure out how to show more forms to review multiple instructors-->
     </fieldset>
 
     <fieldset>
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" id="reviewsubmit">
     </fieldset>
     
 
@@ -75,21 +85,19 @@
 
 <script>
 
-//prevent form submission if fields are not filled out
+//alert user if try to submit form before enough values are checked
 
-// $('#reviewform').on('submit', function (evt) {
-//     var required = reviewform.getElementById("#required");
-//     var allInputs = reviewform.getElementsByTagName('input');
-//     var input, i;
+function checkInputs(evt) {
+    if ($('div:not(:has(:radio:checked))').length > 0) {
+    evt.preventDefault();
+    alert("Please rate each item!");
+    }
+}
 
-//     for(i = 0; input = allInputs[i]; i++) {
-//         if(!input.value) {
-//         alert("Please select a value for each field");
-//         evt.preventDefault();
-//         }
-//     }
-    
-// });
+
+$('#reviewsubmit').on("click", checkInputs)
+
+
 </script>
 
 {% endblock %}
