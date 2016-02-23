@@ -176,7 +176,20 @@ def process_search():
 
     db.session.commit()
 
-    return render_template("search_results.html", studios=studios)
+    #create a dictionary with studio name and lats and longs
+    #pass dictionary to javascript to iterate over and create
+    #multiple markers
+
+    # import pdb
+    # pdb.set_trace()
+
+    markers = {}
+    for studio in studios:
+        markers[str(studio.name)] = {"latitude": float(str(studio.location.coordinate.latitude)),
+                                     "longitude": float(str(studio.location.coordinate.longitude))}
+
+    return render_template("search_results.html", studios=studios,
+                           markers=markers)
 
 
 @app.route('/studios/<studio_id>', methods=["GET"])
@@ -340,13 +353,21 @@ def process_review_form():
 
     #if this studio has already been reviewed, calculate the average
     #if not, add this first review to studio db
+    # if len(all_reviews) > 1:
+    #     studio.overall_rating = ((float(str(old_overall_rating))) + (float(str(overall_rating)))) / float(str(max_id))
+    #     studio.amenities_rating = ((float(str(old_amenities_rating))) + (float(str(amenities_rating)))) / float(str(max_id))
+    #     studio.cleanliness_rating = ((float(str(old_cleanliness_rating))) + (float(str(cleanliness_rating)))) / float(str(max_id))
+    #     studio.class_size_rating = ((float(str(old_class_size_rating))) + (float(str(class_size_rating)))) / float(str(max_id))
+    #     studio.schedule_rating = ((float(str(old_schedule_rating))) + (float(str(schedule_rating)))) / float(str(max_id))
+    #     studio.pace_rating = ((float(str(old_pace_rating))) + (float(str(pace_rating)))) / float(str(max_id))
+    #     db.session.commit()
     if len(all_reviews) > 1:
-        studio.overall_rating = ((float(str(old_overall_rating))) + (float(str(overall_rating)))) / float(str(max_id))
-        studio.amenities_rating = ((float(str(old_amenities_rating))) + (float(str(amenities_rating)))) / float(str(max_id))
-        studio.cleanliness_rating = ((float(str(old_cleanliness_rating))) + (float(str(cleanliness_rating)))) / float(str(max_id))
-        studio.class_size_rating = ((float(str(old_class_size_rating))) + (float(str(class_size_rating)))) / float(str(max_id))
-        studio.schedule_rating = ((float(str(old_schedule_rating))) + (float(str(schedule_rating)))) / float(str(max_id))
-        studio.pace_rating = ((float(str(old_pace_rating))) + (float(str(pace_rating)))) / float(str(max_id))
+        studio.overall_rating = (old_overall_rating + (float(str(overall_rating)))) / float(str(max_id))
+        studio.amenities_rating = (old_amenities_rating + (float(str(amenities_rating)))) / float(str(max_id))
+        studio.cleanliness_rating = (old_cleanliness_rating + (float(str(cleanliness_rating)))) / float(str(max_id))
+        studio.class_size_rating = (old_class_size_rating + (float(str(class_size_rating)))) / float(str(max_id))
+        studio.schedule_rating = (old_schedule_rating + (float(str(schedule_rating)))) / float(str(max_id))
+        studio.pace_rating = (old_pace_rating + (float(str(pace_rating)))) / float(str(max_id))
         db.session.commit()
     else:
         studio.overall_rating = overall_rating

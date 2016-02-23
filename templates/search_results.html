@@ -21,6 +21,43 @@
 <hr>
 {% endfor %}
 
+<div id="bigmap"></div>
 
+
+<script>
+
+        
+        // debugger
+
+        function initMap() {
+            var map;
+            map = new google.maps.Map(document.getElementById('bigmap'), {
+                var lat = markers[0].latitude;
+                var lng = markers[0].longitude;
+                center: {lat: lat, lng: lng},
+                zoom: 14
+            });
+
+            for (i = 0; i < markers.length; i++) {
+                var lat = parseFloat(markers[i].latitude);
+                var lng = parseFloat(markers[i].longitude);
+                var myLatLng = {lat, lng};
+                 var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map,
+                    title: markers[i]
+                });
+            }
+        }
+
+
+        // google.maps.event.addDomListener(window, 'load', initMap);
+
+
+</script>
+
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOw5Cog-7VVeGLqF9TRxbHu81-RxKdKUk&callback=initMap">
+    </script>
 
 {% endblock %}
