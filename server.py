@@ -14,6 +14,8 @@ from sqlalchemy import func
 
 import json
 
+from fuzzywuzzy import fuzz, process
+
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
@@ -156,45 +158,57 @@ def process_search():
     location = request.args.get('location')
     term = request.args.get('term')
 
-    #create a set of parameters
-    params = {
-        'term': term,
-        'location': location,
-        'limit': 10,
-        'sort': 0,
-        'category_filter': 'fitness'
-    }
+    #use fuzzy string comparison to check if search term somewhat matches
+    #an option in the Yelp categories
+    #if it does match, run the API request
+    #if not, redirect to homepage
+    choices = ['barre classes', 'bootcamps', 'boxing', 'cardio classes',
+               'dance studio', 'ems training', 'golf lessons', 'gyms',
+               'martial arts', 'meditation centers', 'pilates', 'qigong',
+               'swimming lessons', 'tai chi', 'trainers', 'yoga', 'climbing',
+               'cycling']
 
-    #query the Search API
-    response = client.search(**params)
+    result = process.extractOne(term, choices)
 
-    #studios is a list of business dictionaries
-    studios = response.businesses
+    if result[1] > 50:
+        term = result[0]
+            #create a set of parameters
+        params = {
+            'term': term,
+            'location': location,
+            'limit': 10,
+            'sort': 0,
+            'category_filter': 'fitness'
+        }
 
-    for studio in studios:
-        studio_id = studio.id
-        existing_studio = Studio.query.filter(Studio.studio_id == studio_id).all()
-        if not existing_studio:
-            studio = Studio(studio_id=studio_id, name=studio.name,
-                        zipcode=studio.location.postal_code)
-            db.session.add(studio)
+        #query the Search API
+        response = client.search(**params)
 
-    db.session.commit()
+        #studios is a list of business dictionaries
+        studios = response.businesses
 
-    #create a dictionary with studio name and lats and longs
-    #pass dictionary to javascript to iterate over and create
-    #multiple markers
+        for studio in studios:
+            studio_id = studio.id
+            existing_studio = Studio.query.filter(Studio.studio_id == studio_id).all()
+            if not existing_studio:
+                studio = Studio(studio_id=studio_id, name=studio.name,
+                            zipcode=studio.location.postal_code)
+                db.session.add(studio)
 
-    # import pdb
-    # pdb.set_trace()
+        db.session.commit()
 
-    lat = float(str(studios[0].location.coordinate.latitude))
-    lng = float(str(studios[0].location.coordinate.longitude))
+        lat = float(str(studios[0].location.coordinate.latitude))
+        lng = float(str(studios[0].location.coordinate.longitude))
 
+        return render_template("search_results.html", studios=studios,
+                       lat=lat, lng=lng, location=location,
+                       term=term)
 
-    return render_template("search_results.html", studios=studios,
-                           lat=lat, lng=lng, location=location,
-                           term=term)
+    else:
+        flash("""Hmmm, we can't find any results that match your search.
+               Please try again.""")
+        return redirect("/")
+
 
 @app.route('/studios.json', methods=['GET'])
 def get_studio_location():
