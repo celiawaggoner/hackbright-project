@@ -153,13 +153,16 @@ def process_search():
     """Passes user imput into Yelp API search and return results"""
 
     #get input from search form
-    zipcode = request.args.get('zipcode')
+    location = request.args.get('location')
+    term = request.args.get('term')
 
     #create a set of parameters
     params = {
-        'term': 'Fitness & Instruction',
-        'location': zipcode,
-        'limit': 10
+        'term': term,
+        'location': location,
+        'limit': 10,
+        'sort': 0,
+        'category_filter': 'fitness'
     }
 
     #query the Search API
@@ -190,18 +193,20 @@ def process_search():
 
 
     return render_template("search_results.html", studios=studios,
-                           lat=lat, lng=lng, zipcode=zipcode)
+                           lat=lat, lng=lng, location=location,
+                           term=term)
 
 @app.route('/studios.json', methods=['GET'])
 def get_studio_location():
     """Create a JSON object with latitudes and longitudes"""
 
-    zipcode = request.args.get("zipcode")
+    location = request.args.get("location")
+    term = request.args.get("term")
 
     #create a set of parameters
     params = {
-        'term': 'Fitness & Instruction',
-        'location': zipcode,
+        'term': term,
+        'location': location,
         'limit': 10
     }
 

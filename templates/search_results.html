@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<span id="zipcode" data-zipcode={{ zipcode }}></span>
+<span id="location" data-location={{ location }}></span>
+<span id="term" data-term={{ term }}></span>
 {% for studio in studios %}
 <div>
     <img src="{{ studio.image_url }}">
@@ -40,7 +41,8 @@
             });
 
                  var data = {
-                            "zipcode": $("#zipcode").data('zipcode'),
+                            "location": $("#location").data('location'),
+                            "term": $("#term").data('term')
                             };
                 $.get('/studios.json', data, function (results) {
 
