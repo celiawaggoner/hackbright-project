@@ -161,6 +161,7 @@ def process_search():
     #use fuzzy string comparison to check if search term somewhat matches
     #an option in the Yelp categories
     #if it does match, run the API request
+    #if it doesn't match, but matches the name of a studio in the db, run API request
     #if not, redirect to homepage
     choices = ['barre classes', 'bootcamps', 'boxing', 'cardio classes',
                'dance studio', 'ems training', 'golf lessons', 'gyms',
@@ -169,6 +170,13 @@ def process_search():
                'cycling']
 
     result = process.extractOne(term, choices)
+
+    #get names of studios already in database
+    studios_in_db = Studio.query.filter(Studio.name == term).all()
+    studio_names = []
+    for studio in studios_in_db:
+        name = studio.name
+        studio_names.append(name)
 
     if result[1] > 50:
         term = result[0]
@@ -203,7 +211,27 @@ def process_search():
         return render_template("search_results.html", studios=studios,
                        lat=lat, lng=lng, location=location,
                        term=term)
+    elif term in studio_names:
+        params = {
+            'term': term,
+            'location': location,
+            'limit': 10,
+            'sort': 0,
+            'category_filter': 'fitness'
+        }
 
+        #query the Search API
+        response = client.search(**params)
+
+        #studios is a list of business dictionaries
+        studios = response.businesses
+
+        lat = float(str(studios[0].location.coordinate.latitude))
+        lng = float(str(studios[0].location.coordinate.longitude))
+
+        return render_template("search_results.html", studios=studios,
+                       lat=lat, lng=lng, location=location,
+                       term=term)
     else:
         flash("""Hmmm, we can't find any results that match your search.
                Please try again.""")
