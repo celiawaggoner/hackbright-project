@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
+<span id="zipcode" data-zipcode={{ zipcode }}></span>
 {% for studio in studios %}
 <div>
     <img src="{{ studio.image_url }}">
@@ -29,28 +29,45 @@
         
         // debugger
 
-        function initMap() {
-            var map;
+        //json string into object
+        var map;
+
+            function initMap() {
+            
             map = new google.maps.Map(document.getElementById('bigmap'), {
-                var lat = markers[0].latitude;
-                var lng = markers[0].longitude;
-                center: {lat: lat, lng: lng},
+                center: {lat: {{ lat }}, lng: {{ lng }}},
                 zoom: 14
             });
 
-            for (i = 0; i < markers.length; i++) {
-                var lat = parseFloat(markers[i].latitude);
-                var lng = parseFloat(markers[i].longitude);
-                var myLatLng = {lat, lng};
-                 var marker = new google.maps.Marker({
-                    position: myLatLng,
-                    map: map,
-                    title: markers[i]
-                });
-            }
-        }
+                 var data = {
+                            "zipcode": $("#zipcode").data('zipcode'),
+                            };
+                $.get('/studios.json', data, function (results) {
+
+                    // var markers = JSON.parse(results);
+
+                    var markers = results;
+
+                    // console.log(markers);
+
+                        for (var key in markers) {
+                            var lat = markers[key].latitude;
+                            var lng = markers[key].longitude;
+                            var myLatLng = {lat, lng};
+                             var marker = new google.maps.Marker({
+                                position: myLatLng,
+                                map: map,
+                                title: key
+                                });
+                            }
+                        });
+                    }
 
 
+            
+        
+
+        // createMap()
         // google.maps.event.addDomListener(window, 'load', initMap);
 
 

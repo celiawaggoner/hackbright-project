@@ -12,6 +12,8 @@ import os
 
 from sqlalchemy import func
 
+import json
+
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
@@ -183,13 +185,42 @@ def process_search():
     # import pdb
     # pdb.set_trace()
 
-    markers = {}
-    for studio in studios:
-        markers[str(studio.name)] = {"latitude": float(str(studio.location.coordinate.latitude)),
-                                     "longitude": float(str(studio.location.coordinate.longitude))}
+    lat = float(str(studios[0].location.coordinate.latitude))
+    lng = float(str(studios[0].location.coordinate.longitude))
+
 
     return render_template("search_results.html", studios=studios,
-                           markers=markers)
+                           lat=lat, lng=lng, zipcode=zipcode)
+
+@app.route('/studios.json', methods=['GET'])
+def get_studio_location():
+    """Create a JSON object with latitudes and longitudes"""
+
+    zipcode = request.args.get("zipcode")
+
+    #create a set of parameters
+    params = {
+        'term': 'Fitness & Instruction',
+        'location': zipcode,
+        'limit': 10
+    }
+
+    #query the Search API
+    response = client.search(**params)
+
+    #studios is a list of business dictionaries
+    studios = response.businesses
+
+    results = {}
+    for studio in studios:
+        results[str(studio.name)] = {"latitude": float(str(studio.location.coordinate.latitude)),
+                                     "longitude": float(str(studio.location.coordinate.longitude))}
+
+    # import pdb
+    # pdb.set_trace()
+
+
+    return jsonify(results)
 
 
 @app.route('/studios/<studio_id>', methods=["GET"])
