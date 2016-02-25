@@ -169,17 +169,23 @@ def process_search():
                'swimming lessons', 'tai chi', 'trainers', 'yoga', 'climbing',
                'cycling']
 
-    result = process.extractOne(term, choices)
+    category_result = process.extractOne(term, choices)
 
     #get names of studios already in database
-    studios_in_db = Studio.query.filter(Studio.name == term).all()
+
+    # import pdb
+    # pdb.set_trace()
+
+    studios_in_db = Studio.query.filter(func.lower(Studio.name).like("%"+term[1:3]+"%")).all()
     studio_names = []
     for studio in studios_in_db:
         name = studio.name
         studio_names.append(name)
 
-    if result[1] > 50:
-        term = result[0]
+    name_result = process.extractOne(term, studio_names)
+
+    if category_result[1] > 50:
+        term = category_result[0]
             #create a set of parameters
         params = {
             'term': term,
@@ -211,7 +217,8 @@ def process_search():
         return render_template("search_results.html", studios=studios,
                        lat=lat, lng=lng, location=location,
                        term=term)
-    elif term in studio_names:
+    elif name_result[1] > 50:
+        term = name_result[0]
         params = {
             'term': term,
             'location': location,
@@ -319,6 +326,35 @@ def show_studio_profile(studio_id):
                            instructors=instructors,
                            review_count=review_count,
                            latitude=latitude, longitude=longitude)
+
+
+@app.route('/instructor-move-form', methods=["POST"])
+def check_instructor_move():
+    """Update db with instructor move info"""
+
+    # import pdb
+    # pdb.set_trace()
+
+    #get user input from form
+    name = request.form.get("name")
+    old_studio_id = request.form.get("studio_id")
+    studio = request.form.get("studio")
+    zipcode = request.form.get("zipcode")
+
+    #check if user inputed studio exists in db
+    studio_in_db = Studio.query.filter(Studio.name == studio, Studio.zipcode == zipcode).first()
+
+    #query db for instructor record
+    instructor = Instructor.query.filter(Instructor.name == name, Instructor.studio_id == old_studio_id).first()
+
+    #if exists, find instructor in db and update studio id
+    if studio_in_db:
+        instructor.studio_id = studio_in_db.studio_id
+        db.session.commit()
+     #if does not exist, add studio to db then update instructor record
+
+    return redirect('/studios/' + str(old_studio_id))
+
 
 
 @app.route('/write-a-review/<studio_id>')

@@ -73,26 +73,50 @@
     {% for instructor in instructors %}
         {% for review in instructor.instructorreviews %}
             {% if review.instructor.name %}
-                <li>{{ review.instructor.name }}, {{ review.rating }}</li>
-                <button type="button" id="instructor"><span class="glyphicon glyphicon-edit"></span></button>
+                <p>Name: {{ review.instructor.name }} Rating: {{ review.rating }}</p>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="instructorbtn"><span class="glyphicon glyphicon-edit"></span></button>
 
-                <div id="modal_wrapper">
-                <div id="modal_window">
+                <!-- Modal -->
+                <div id="myModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
 
-                <div style="text-align: right;"><a id="modal_close" href="#">close <b>X</b></a></div>
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Tell us where this instructor's moved!</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                              <label for="name">Instructor Name</label>
+                              <input type="text" class="form-control" id="name" value="{{ review.instructor.name }}">
+                            </div>
+                            <div class="form group">
+                            <input type="hidden" name="studio_id" value="{{ studio.id }}">
+                            </div>
+                            <div class="form-group">
+                              <label for="studio">Studio</label>
+                              <input type="text" class="form-control" id="studio" placeholder="Name of new studio">
+                            </div>
+                              <div class="form-group">
+                              <label for="location">Zipcode</label>
+                              <input type="text" class="form-control" id="zipcode" placeholder="Zipcode of new studio">
+                            </div>
+                           <button type="submit" class="btn btn-default btn-success btn-block"></span>Submit</button>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
 
-                <p>Let us know where this instructor has moved!</p>
-
-                <form id="modal_feedback" method="POST" action="#" accept-charset="UTF-8">
-                <p><label>Instructor name<strong>*</strong><br>
-                <input type="text" autofocus required size="48" name="name" placeholder="Name"></label></p>
-                <p><label>Name of new studio<strong>*</strong><br>
-                <input type="text" autofocus required size="48" name="studio" placeholder="New Studio"></label></p>
-                <p><input type="submit" name="instructormove" value="Submit"></p>
-                </form>
-
-                </div> <!-- #modal_window -->
-                </div> <!-- #modal_wrapper -->
+                  </div>
+                </div>
             {% endif %}
         {% endfor %}
     {% endfor %}
@@ -183,7 +207,8 @@
         }
 
 
-    
+        $("#myModal").onclick.modal("show");
+     
     </script>
 
     <script async defer
