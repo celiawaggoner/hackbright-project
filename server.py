@@ -157,6 +157,7 @@ def process_search():
     #get input from search form
     location = request.args.get('location')
     term = request.args.get('term')
+    term = term.lower()
 
     #use fuzzy string comparison to check if search term somewhat matches
     #an option in the Yelp categories
@@ -334,7 +335,6 @@ def check_instructor_move():
 
     # import pdb
     # pdb.set_trace()
-
     #get user input from form
     name = request.form.get("name")
     old_studio_id = request.form.get("studio_id")
