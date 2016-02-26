@@ -139,7 +139,55 @@ def show_user_profile(user_id):
                            last_name=last_name, city=city, state=state,
                            favorites=favorites, reviews=reviews,
                            instructor_reviews=instructor_reviews)
-              
+
+
+@app.route('/preferences.json')
+def check_user_preferences():
+    """Check for a user's existing preferences to prefill form"""
+
+    # import pdb
+    # pdb.set_trace()
+
+    user_id = session['user']
+
+    user = User.query.filter(User.user_id == user_id).one()
+
+    preferences = {"amenities_pref": user.amenities_pref,
+                    "cleanliness_pref": user.cleanliness_pref,
+                    "class_size_pref": user.class_size_pref,
+                    "class_schedule_pref": user.class_schedule_pref,
+                    "class_pace_pref": user.class_pace_pref}
+
+    if user.amenities_pref > 0:
+        return jsonify(preferences)
+
+
+@app.route('/preferences', methods=["POST"])
+def update_user_preferences():
+    """Get user inputs from preferences form and update database"""
+
+    #get user preferences from form
+    amenities_pref = request.form.get("amenities")
+    cleanliness_pref = request.form.get("cleanliness")
+    class_size_pref = request.form.get("class_size")
+    class_schedule_pref = request.form.get("class_schedule")
+    class_pace_pref = request.form.get("class_pace")
+
+    #query db for user
+    user_id = session['user']
+    user = User.query.filter(User.user_id == user_id).one()
+
+    #add or update user preferences in db
+    user.amenities_pref = amenities_pref
+    user.cleanliness_pref = cleanliness_pref
+    user.class_size_pref = class_size_pref
+    user.class_schedule_pref = class_schedule_pref
+    user.class_pace_pref = class_pace_pref
+
+    db.session.commit()
+
+    return redirect('/user/' + str(user_id))
+             
 
 @app.route('/logout')
 def logout():
@@ -351,7 +399,10 @@ def check_instructor_move():
     if studio_in_db:
         instructor.studio_id = studio_in_db.studio_id
         db.session.commit()
-     #if does not exist, add studio to db then update instructor record
+     #if does not exist, alert user
+    else:
+        flash("""Sorry! We couldn't find that studio. Please search for it
+                and add a review for this instructor.""")
 
     return redirect('/studios/' + str(old_studio_id))
 

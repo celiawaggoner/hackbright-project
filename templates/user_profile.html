@@ -5,6 +5,70 @@
 <h3>{{ first_name }} {{ last_name }}</h3>
 <h4>{{ city }}, {{ state }}</h4>
 
+<div id="preferences">
+    <h5>Preferences</h5>
+     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="prefbtn">Update <span class="glyphicon glyphicon-cog"></span></button>
+
+    <!-- Modal -->
+      <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+             <h4 class="modal-title">Update Your Preferences</h4>
+             <h5 class="modal-title">Let us know what you're looking for in a workout studio so we can help you find the best fit.</h5>
+            </div>
+            <div class="modal-body">
+              <form role="form">
+                <div class="form-group">
+                  <label for="amenities">How important are the amenities? (showers, lockers, etc.)</label>
+                  <br>
+                  <input type="radio" name="amenities" value="1" required>Doesn't matter.
+                  <input type="radio" name="amenities" value="2">Meh.
+                  <input type="radio" name="amenities" value="3">Super important!
+                </div>
+                <div class="form-group">
+                 <label for="cleanliness">Cleanliness?</label>
+                  <br>
+                  <input type="radio" name="cleanliness" value="1" required>Doesn't matter.
+                  <input type="radio" name="cleanliness" value="2">Meh.
+                  <input type="radio" name="cleanliness" value="3">Super important!
+                </div>
+                <div class="form-group">
+                 <label for="class_size">Class size? (do you want to avoid crowds?)</label>
+                 <br>
+                 <input type="radio" name="class_size" value="1" required>Doesn't matter.
+                 <input type="radio" name="class_size" value="2">Meh.
+                 <input type="radio" name="class_size" value="3">Super important!
+                </div>
+                <div class="form-group">
+                 <label for="class_schedule">Class schedule? (do you need a wide range of class times?)</label>
+                  <br>
+                  <input type="radio" name="class_schedule" value="1" required>Doesn't matter.
+                  <input type="radio" name="class_schedule" value="2">Meh.
+                  <input type="radio" name="class_schedule" value="3">Super important!
+                </div>
+                <div class="form-group">
+                 <label for="class_pace">Class pace? (the intenser the better?)</label>
+                  <br>
+                  <input type="radio" name="class_pace" value="1" required>Doesn't matter.
+                  <input type="radio" name="class_pace" value="2">Meh.
+                  <input type="radio" name="class_pace" value="3">Super important!
+                </div>
+                <button type="submit" class="btn btn-default btn-success btn-block" id="prefsubmit">Update</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+
+</div>
+
 <div>
     <h5>My Favorite Studios:</h5>
     <ul>
@@ -42,6 +106,44 @@
     {% endfor %}
     
 </div>
+
+<script>
+
+        function checkPreferences() {
+            $.get('/preferences.json', function (results) {
+                var preferences = results;
+                var amenities = String(preferences.amenities_pref);
+                $("input[name='amenities'][value="+amenities+"]").prop('checked', true);
+                var cleanliness= String(preferences.cleanliness_pref);
+                $("input[name='cleanliness'][value="+cleanliness+"]").prop('checked', true);
+                var class_size = String(preferences.class_size_pref);
+                $("input[name='class_size'][value="+class_size+"]").prop('checked', true);
+                var class_schedule = String(preferences.class_schedule_pref);
+                $("input[name='class_schedule'][value="+class_schedule+"]").prop('checked', true);
+                var class_pace = String(preferences.class_pace_pref);
+                $("input[name='class_pace'][value="+class_pace+"]").prop('checked', true);
+            });
+        }
+
+        $('#prefbtn').on('click', checkPreferences);
+        //get form inputs and send to server via AJAX
+        function getInputs(evt) {
+            evt.preventDefault();
+            var data = {
+                        "amenities": $("input[name=amenities]:checked").val(),
+                        "cleanliness": $("input[name=cleanliness]:checked").val(),
+                        "class_size": $("input[name=class_size]:checked").val(),
+                        "class_schedule": $("input[name=class_schedule]:checked").val(),
+                        "class_pace": $("input[name=class_pace]:checked").val()
+                        }
+           
+            $.post('/preferences', data, function () {
+                $("#myModal").modal("hide");
+            });
+        }
+
+        $('#prefsubmit').on('click', getInputs);
+</script>
 
 
 {% endblock %}

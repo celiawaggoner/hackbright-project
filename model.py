@@ -24,6 +24,11 @@ class User(db.Model):
     city = db.Column(db.String(25), nullable=False)
     state = db.Column(db.String(25), nullable=False)
     zipcode = db.Column(db.String(25), nullable=False)
+    amenities_pref = db.Column(db.Integer, nullable=True)
+    cleanliness_pref = db.Column(db.Integer, nullable=True)
+    class_size_pref = db.Column(db.Integer, nullable=True)
+    class_schedule_pref = db.Column(db.Integer, nullable=True)
+    class_pace_pref = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
