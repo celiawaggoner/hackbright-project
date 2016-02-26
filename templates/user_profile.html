@@ -5,8 +5,12 @@
 <h3>{{ first_name }} {{ last_name }}</h3>
 <h4>{{ city }}, {{ state }}</h4>
 
+<div id="profpic">
+    <img id="profile" src="/static/img/profile.jpg">
+</div>
+
 <div id="preferences">
-    <h5>Preferences</h5>
+    <h4>Preferences</h4>
      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="prefbtn">Update <span class="glyphicon glyphicon-cog"></span></button>
 
     <!-- Modal -->
@@ -70,7 +74,7 @@
 </div>
 
 <div>
-    <h5>My Favorite Studios:</h5>
+    <h4>My Favorite Studios:</h4>
     <ul>
     {% for favorite in favorites %}
     <a href="/studios/{{ favorite.studio_id }}">
@@ -82,7 +86,7 @@
 </div>
 
 <div>
-    <h5>My Reviews:</h5>
+    <h4>My Reviews:</h4>
     {% for review in reviews %}
     <ul>
         <li style="font-weight:bold"><a href="/studios/{{ review.studio_id }}">{{ review.studio.name }}</a></li>
@@ -94,7 +98,7 @@
         <li>Pace rating: {{ review.pace_rating }}</li>
     </ul>
     {% endfor %}
-    <h5>My Instructor Reviews:</h5>
+    <h4>My Instructor Reviews:</h4>
     {% for review in instructor_reviews %}
     {% if review.instructor.name %}
     <ul>

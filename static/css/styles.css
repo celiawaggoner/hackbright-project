@@ -1,5 +1,28 @@
+   #homepageheader {
 
+   }
+
+
+   #map {
+      height: 300px;
+      width: 300px;
+    }
+    #bigmap {
+      height: 600px;
+      width: 600px;
+    }
 
 #homepagesearch {
                 text-align: center;
+
+}
+
+body {
+        background-image: url("/static/img/studio.jpg");
+}
+
+#profile {
+    height: 175px;
+    width: 130px;
+    border-radius: 20px;
 }
