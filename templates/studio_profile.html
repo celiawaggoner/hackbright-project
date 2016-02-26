@@ -44,7 +44,7 @@
     <p>Be the first to review this studio!</p>
     {% endif %}
     <ul>
-    {% for review in reviews %}
+    {% for review in reviews[:5] %}
     <li>Overall rating: {{ review.overall_rating }},
         Amenities rating: {{ review.amenities_rating }},
         Cleanliness rating: {{ review.cleanliness_rating }},
@@ -68,7 +68,9 @@
 
 <div>
     <h4>Instructor Reviews:</h4>
+    {% if instructors %}
     <h6>Let us know if an instructor has switched studios by clicking the button by their name.</h6>
+    {% endif %}
     <ul>
     {% for instructor in instructors %}
         {% for review in instructor.instructorreviews %}

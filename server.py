@@ -266,7 +266,13 @@ def process_search():
         return render_template("search_results.html", studios=studios,
                        lat=lat, lng=lng, location=location,
                        term=term)
-    elif name_result[1] > 50:
+
+    elif not name_result:
+        flash("""Hmmm, we can't find any results that match your search.
+               Please try again.""")
+        return redirect("/")       
+
+    elif name_result[1] > 90:
         term = name_result[0]
         params = {
             'term': term,
@@ -286,8 +292,8 @@ def process_search():
         lng = float(str(studios[0].location.coordinate.longitude))
 
         return render_template("search_results.html", studios=studios,
-                       lat=lat, lng=lng, location=location,
-                       term=term)
+                               lat=lat, lng=lng, location=location,
+                               term=term)
     else:
         flash("""Hmmm, we can't find any results that match your search.
                Please try again.""")
@@ -526,13 +532,21 @@ def process_review_form():
     #     studio.schedule_rating = ((float(str(old_schedule_rating))) + (float(str(schedule_rating)))) / float(str(max_id))
     #     studio.pace_rating = ((float(str(old_pace_rating))) + (float(str(pace_rating)))) / float(str(max_id))
     #     db.session.commit()
+    # if len(all_reviews) > 1:
+    #     studio.overall_rating = (old_overall_rating + (float(str(overall_rating)))) / float(str(max_id))
+    #     studio.amenities_rating = (old_amenities_rating + (float(str(amenities_rating)))) / float(str(max_id))
+    #     studio.cleanliness_rating = (old_cleanliness_rating + (float(str(cleanliness_rating)))) / float(str(max_id))
+    #     studio.class_size_rating = (old_class_size_rating + (float(str(class_size_rating)))) / float(str(max_id))
+    #     studio.schedule_rating = (old_schedule_rating + (float(str(schedule_rating)))) / float(str(max_id))
+    #     studio.pace_rating = (old_pace_rating + (float(str(pace_rating)))) / float(str(max_id))
+    #     db.session.commit()
     if len(all_reviews) > 1:
-        studio.overall_rating = (old_overall_rating + (float(str(overall_rating)))) / float(str(max_id))
-        studio.amenities_rating = (old_amenities_rating + (float(str(amenities_rating)))) / float(str(max_id))
-        studio.cleanliness_rating = (old_cleanliness_rating + (float(str(cleanliness_rating)))) / float(str(max_id))
-        studio.class_size_rating = (old_class_size_rating + (float(str(class_size_rating)))) / float(str(max_id))
-        studio.schedule_rating = (old_schedule_rating + (float(str(schedule_rating)))) / float(str(max_id))
-        studio.pace_rating = (old_pace_rating + (float(str(pace_rating)))) / float(str(max_id))
+        studio.overall_rating = int(str(old_overall_rating)) + int(overall_rating) / int(str(max_id))
+        studio.amenities_rating = int(str(old_amenities_rating)) + int(amenities_rating) / int(str(max_id))
+        studio.cleanliness_rating = int(str(old_cleanliness_rating)) + int(cleanliness_rating) / int(str(max_id))
+        studio.class_size_rating = int(str(old_class_size_rating)) + int(class_size_rating) / int(str(max_id))
+        studio.schedule_rating = int(str(old_schedule_rating)) + int(schedule_rating) / int(str(max_id))
+        studio.pace_rating = int(str(old_pace_rating)) + int(pace_rating) / int(str(max_id))
         db.session.commit()
     else:
         studio.overall_rating = overall_rating

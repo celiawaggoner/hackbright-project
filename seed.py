@@ -1,5 +1,7 @@
 from sqlalchemy import func
 
+from random import randint
+
 from model import User
 from model import Studio
 from model import Review
@@ -43,6 +45,50 @@ def load_users():
     db.session.commit()
 
 
+def initial_studio_reviews():
+    """Generate initial reviews for each studio"""
+
+    #get all studios from db
+    studios = Studio.query.all()
+
+    for studio in studios:
+        studio.overall_rating = 3
+        studio.amenities_rating = 3
+        studio.cleanliness_rating = 3
+        studio.class_size_rating = 3
+        studio.schedule_rating = 3
+        studio.pace_rating = 3
+
+    db.session.commit()
+
+
+def generate_reviews():
+
+    print "Reviews"
+
+    Review.query.delete()
+
+    #query db to get all users
+    users = User.query.all()
+
+    #query db to get all studios
+    studios = Studio.query.all()
+
+    for user in users:
+        for studio in studios:
+            review = Review(user_id=user.user_id,
+                            studio_id=studio.studio_id,
+                            overall_rating=randint(1, 5),
+                            amenities_rating=randint(1, 5),
+                            cleanliness_rating=randint(1, 5),
+                            class_size_rating=randint(1, 5),
+                            schedule_rating=randint(1, 5),
+                            pace_rating=randint(1, 5))
+            db.session.add(review)
+
+    db.session.commit()  
+
+
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""
 
@@ -65,4 +111,6 @@ if __name__ == "__main__":
     # Import different types of data
     load_users()
 
+    initial_studio_reviews()
 
+    generate_reviews()

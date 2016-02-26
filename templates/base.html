@@ -20,7 +20,10 @@
           <!--         <a class="navbar-brand" href="/">
                     <img alt="Brand" src="http://trubeapp.com/images/update/icon-yoga.png">
                   </a> -->
-                <button type="button" class="btn btn-default navbar-btn navbar-left" role="Register"><a href="/">Home</a></button>
+              <!--   <button type="button" class="btn btn-default navbar-btn navbar-left" role="Register"><a href="/">Home</a></button> -->
+                <a class="navbar-brand" href="/">
+                        <img alt="Brand" src="/static/img/design.png" style="height:60px; width: 60px; border-radius: 10px">
+                      </a>
                 <form action="/studios" class="navbar-form navbar-left" role="search">
                     <div class="form-group">
                     <input type="text" class="form-control" name="location" placeholder="Location" required>
@@ -36,7 +39,7 @@
             {% endif %}
             {% if session.user %}
             <ul class="navbar-header navbar-right nav-pills">
-              <button type="button" class="btn btn-default navbar-btn" role="Logout"><a href="/logout">Logout</a></button>
+              <button type="button" class="btn btn-default navbar-btn" role="Logout"><a href="/logout">Logout</button></a>
               <button type="button" class="btn btn-default navbar-btn"role="Profile"><a href="/user/{{ session.user }}">Profile</a></button>
             </ul> 
             {% endif %}
