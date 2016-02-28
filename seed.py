@@ -45,22 +45,6 @@ def load_users():
     db.session.commit()
 
 
-def initial_studio_reviews():
-    """Generate initial reviews for each studio"""
-
-    #get all studios from db
-    studios = Studio.query.all()
-
-    for studio in studios:
-        studio.overall_rating = 3
-        studio.amenities_rating = 3
-        studio.cleanliness_rating = 3
-        studio.class_size_rating = 3
-        studio.schedule_rating = 3
-        studio.pace_rating = 3
-
-    db.session.commit()
-
 
 def generate_reviews():
 
@@ -78,15 +62,16 @@ def generate_reviews():
         for studio in studios:
             review = Review(user_id=user.user_id,
                             studio_id=studio.studio_id,
-                            overall_rating=randint(1, 5),
-                            amenities_rating=randint(1, 5),
-                            cleanliness_rating=randint(1, 5),
-                            class_size_rating=randint(1, 5),
-                            schedule_rating=randint(1, 5),
-                            pace_rating=randint(1, 5))
+                            overall_rating=randint(4, 5),
+                            amenities_rating=randint(1, 3),
+                            cleanliness_rating=randint(4, 5),
+                            class_size_rating=randint(4, 5),
+                            schedule_rating=randint(1, 3),
+                            pace_rating=randint(2, 3))
             db.session.add(review)
 
     db.session.commit()  
+
 
 
 def set_val_user_id():
@@ -110,7 +95,5 @@ if __name__ == "__main__":
 
     # Import different types of data
     load_users()
-
-    initial_studio_reviews()
 
     generate_reviews()

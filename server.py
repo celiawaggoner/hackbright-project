@@ -137,16 +137,21 @@ def show_user_profile(user_id):
 
     #make key/value pairs for ratings and phrases
 
+    # import pdb
+    # pdb.set_trace()
 
     preference_phrases = {"1": "Doesn't matter",
                           "2": "Meh.",
                           "3": "Super important!"}
 
+    amenities = preference_phrases.get(user.amenities_pref)
+
     return render_template("user_profile.html", first_name=first_name,
                            last_name=last_name, city=city, state=state,
                            favorites=favorites, reviews=reviews,
                            instructor_reviews=instructor_reviews,
-                           user=user, preference_phrases=preference_phrases)
+                           user=user, preference_phrases=preference_phrases,
+                           amenities=amenities)
 
 
 @app.route('/preferences.json')
