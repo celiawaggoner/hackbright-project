@@ -135,10 +135,18 @@ def show_user_profile(user_id):
 
     instructor_reviews = user.instructorreviews
 
+    #make key/value pairs for ratings and phrases
+
+
+    preference_phrases = {"1": "Doesn't matter",
+                          "2": "Meh.",
+                          "3": "Super important!"}
+
     return render_template("user_profile.html", first_name=first_name,
                            last_name=last_name, city=city, state=state,
                            favorites=favorites, reviews=reviews,
-                           instructor_reviews=instructor_reviews)
+                           instructor_reviews=instructor_reviews,
+                           user=user, preference_phrases=preference_phrases)
 
 
 @app.route('/preferences.json')
@@ -501,52 +509,42 @@ def process_review_form():
 
     #update studios overall scores in db with this user's scores
 
-    #get highest review_id to use as number of reviews for average
-    
-    # import pdb
+    studio = Studio.query.filter(Studio.studio_id == studio_id).first()
+
+    # import pdb 
     # pdb.set_trace()
 
-    max = db.session.query(func.max(Review.review_id)).one()
-    for item in max:
-        max_id = item
-
-    studio = Studio.query.filter(Studio.studio_id == studio_id).first()
-    #get studio ratings that are currently in db
-    old_overall_rating = studio.overall_rating
-    old_amenities_rating = studio.amenities_rating
-    old_cleanliness_rating = studio.cleanliness_rating
-    old_class_size_rating = studio.class_size_rating
-    old_schedule_rating = studio.schedule_rating
-    old_pace_rating = studio.pace_rating
-
     all_reviews = studio.reviews
+
+    #get number of reviews to use for average
+    max_id = len(all_reviews)
+
+    overall_total = 0
+    amenities_total = 0
+    cleanliness_total = 0
+    class_size_total = 0
+    class_schedule_total = 0
+    class_pace_total = 0
+
+    for review in all_reviews:
+        overall_total += int(review.overall_rating)
+        amenities_total += int(review.amenities_rating)
+        cleanliness_total += int(review.cleanliness_rating)
+        class_size_total += int(review.class_size_rating)
+        class_schedule_total += int(review.schedule_rating)
+        class_pace_total += int(review.pace_rating)
 
 
     #if this studio has already been reviewed, calculate the average
     #if not, add this first review to studio db
-    # if len(all_reviews) > 1:
-    #     studio.overall_rating = ((float(str(old_overall_rating))) + (float(str(overall_rating)))) / float(str(max_id))
-    #     studio.amenities_rating = ((float(str(old_amenities_rating))) + (float(str(amenities_rating)))) / float(str(max_id))
-    #     studio.cleanliness_rating = ((float(str(old_cleanliness_rating))) + (float(str(cleanliness_rating)))) / float(str(max_id))
-    #     studio.class_size_rating = ((float(str(old_class_size_rating))) + (float(str(class_size_rating)))) / float(str(max_id))
-    #     studio.schedule_rating = ((float(str(old_schedule_rating))) + (float(str(schedule_rating)))) / float(str(max_id))
-    #     studio.pace_rating = ((float(str(old_pace_rating))) + (float(str(pace_rating)))) / float(str(max_id))
-    #     db.session.commit()
-    # if len(all_reviews) > 1:
-    #     studio.overall_rating = (old_overall_rating + (float(str(overall_rating)))) / float(str(max_id))
-    #     studio.amenities_rating = (old_amenities_rating + (float(str(amenities_rating)))) / float(str(max_id))
-    #     studio.cleanliness_rating = (old_cleanliness_rating + (float(str(cleanliness_rating)))) / float(str(max_id))
-    #     studio.class_size_rating = (old_class_size_rating + (float(str(class_size_rating)))) / float(str(max_id))
-    #     studio.schedule_rating = (old_schedule_rating + (float(str(schedule_rating)))) / float(str(max_id))
-    #     studio.pace_rating = (old_pace_rating + (float(str(pace_rating)))) / float(str(max_id))
-    #     db.session.commit()
+
     if len(all_reviews) > 1:
-        studio.overall_rating = int(str(old_overall_rating)) + int(overall_rating) / int(str(max_id))
-        studio.amenities_rating = int(str(old_amenities_rating)) + int(amenities_rating) / int(str(max_id))
-        studio.cleanliness_rating = int(str(old_cleanliness_rating)) + int(cleanliness_rating) / int(str(max_id))
-        studio.class_size_rating = int(str(old_class_size_rating)) + int(class_size_rating) / int(str(max_id))
-        studio.schedule_rating = int(str(old_schedule_rating)) + int(schedule_rating) / int(str(max_id))
-        studio.pace_rating = int(str(old_pace_rating)) + int(pace_rating) / int(str(max_id))
+        studio.overall_rating = (overall_total + (int(overall_rating))) / int(max_id)
+        studio.amenities_rating = (amenities_total+ (int(amenities_rating))) / int(max_id)
+        studio.cleanliness_rating = (cleanliness_total + (int(cleanliness_rating))) / int(max_id)
+        studio.class_size_rating = (class_size_total + (int(class_size_rating))) / int(max_id)
+        studio.schedule_rating = (class_schedule_total + (int(schedule_rating))) / int(max_id)
+        studio.pace_rating = (class_pace_total + (int(pace_rating))) / int(max_id)
         db.session.commit()
     else:
         studio.overall_rating = overall_rating
