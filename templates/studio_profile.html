@@ -10,28 +10,26 @@
 <div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3">
     <img src="{{ studio.image_url }}">
     <h3>{{ studio.name }}</h3>
-    <h4>Address:</h4>
-    {% for item in studio.location.display_address %}
-    <p>{{ item }}</p>
-    {% endfor %}
+    <p><img src ="{{ studio.rating_img_url }}"><img style="width:60px; height:30px" src="/static/img/yelp.png"></p>
     <h4>Categories:</h4>
     <ul>
         {% for category in studio.categories %}
         <li>{{ category.name }}</li>
         {% endfor %}
     </ul>
-    <p><img src ="{{ studio.rating_img_url }}"><img style="width:60px; height:30px" src="/static/img/yelp.png"></p>
+    <div id="map" data-latitude={{ latitude }} data-longitude={{ longitude }} data-name={{ name }}></div>
+    <h4>Address:</h4>
+    <p>{{ studio.location.display_address[0] }}, {{ studio.location.display_address[2] }}</p>
 </div>
 
 
-<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3">
+<div class="col-xs-12 col-md-6 col-lg-push-2 col-lg-3">
     <h4>Ratings:</h4>
     {% if 1 > review_count %}
     <p>This studio hasn't been reviewed yet.</p>
     {% else %}
     <h6>Review count: {{ review_count }}</h6>
-    <p>{{ individual_score }}
-    <p>Overall score: {{ studio_db.overall_rating }}</p>
+    <p>{{ individual_score }}</p>
     <p>Amenities score: {{ studio_db.amenities_rating }}</p>
     <p>Cleanliness score: {{ studio_db.cleanliness_rating }}</p>
     <p>Class size score: {{ studio_db.class_size_rating }}</p>
@@ -40,12 +38,57 @@
     {{ pace_rating }}
     </p>
     {% endif %}
+    {% if session.user %}
+    <p><a href="/write-a-review/{{ id }}"><button type="button" class="btn btn-default">Review this studio</button></a></p>
+
+    {% if favorited %}
+    <div id="favorite-div">
+        <button class="btn btn-default" style="color:red" id="favorite" data-id={{ id }}>
+            <span class="glyphicon glyphicon-heart"></span> Favorite
+        </button>
+        <span id="notes"></span>
+        <span id="favorite-studio">This is one of your favorites!</span>
+    </div>
+    {% endif %}
+
+    {% if not favorited %}
+    <div id="favorite-div">
+        <button class="btn btn-default" id="favorite" data-id={{ id }}>
+            <span class="glyphicon glyphicon-heart"></span> Favorite
+        </button>
+        <span id="notes"></span>
+        <span id="favorite-studio"></span>
+    </div>
+    {% endif %}
+
+    {% endif %}
 </div>
 
-<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3" id="map" data-latitude={{ latitude }} data-longitude={{ longitude }} data-name={{ name }}></div>
+<div class="col-xs-12 col-md-6 col-lg-push-2 col-lg-3">
+    <h4>Top Instructors:</h4>
+    {% for key, value in instructor_details.iteritems() %}
+        {% if key %}
+          <p>Name: {{ key }} 
+            Ratings: 
+            {% for item in value %}
+            <span>{{ item }}</span>
+            {% endfor %}
+          </p>
+        {% endif %}
+    {% endfor %}
+    <h4>Tips:</h4>
+    <ul>
+    {% for tip in tips[:5] %}
+    {% if tip %}
+    <li>{{ tip }}</li>
+    {% endif %}
+    {% endfor %}
+    </ul>
+</div>
 
 </div> <!--closing row -->
 
+<div class="row">
 <div>
     <h4>Studio Reviews:</h4>
     {% if 1 > review_count %}
@@ -53,8 +96,7 @@
     {% endif %}
     <ul>
     {% for review in reviews[:5] %}
-    <li>Overall rating: {{ review.overall_rating }},
-        Amenities rating: {{ review.amenities_rating }},
+    <li>Amenities rating: {{ review.amenities_rating }},
         Cleanliness rating: {{ review.cleanliness_rating }},
         Class size rating: {{ review.class_size_rating }},
         Schedule rating: {{ review.schedule_rating }},
@@ -64,15 +106,6 @@
     </ul>
 </div>
 
-<div>
-    <h4>Top Instructors:</h4>
-    <p></p>
-</div>
-
-<div>
-    <h4>Top Classes:</h4>
-    <p></p>
-</div>
 
 <div>
     <h4>Instructor Reviews:</h4>
@@ -133,32 +166,7 @@
     </ul>
 </div>
 
-
-{% if session.user %}
-<a href="/write-a-review/{{ id }}"><button type="button">Review this studio</button></a>
-
-
-{% if favorited %}
-<div id="favorite-div">
-    <button style="color:red" id="favorite" data-id={{ id }}>
-        <span class="glyphicon glyphicon-heart"></span> Favorite
-    </button>
-    <span id="notes"></span>
-    <span id="favorite-studio">This is one of your favorites!</span>
-</div>
-{% endif %}
-
-{% if not favorited %}
-<div id="favorite-div">
-    <button id="favorite" data-id={{ id }}>
-        <span class="glyphicon glyphicon-heart"></span> Favorite
-    </button>
-    <span id="notes"></span>
-    <span id="favorite-studio"></span>
-</div>
-{% endif %}
-
-{% endif %}
+</div> <!--closing row -->
 
 {% endfor %}
 
@@ -202,8 +210,10 @@
 
         // google.maps.event.addDomListener(window, 'load', initMap);
 
+     
         var map;
         function initMap() {
+
             var myLatLng = {lat: latitude, lng: longitude}
             map = new google.maps.Map(document.getElementById('map'), {
               center: myLatLng,

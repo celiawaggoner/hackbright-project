@@ -234,7 +234,7 @@ def process_search():
                'dance studio', 'ems training', 'golf lessons', 'gyms',
                'martial arts', 'meditation centers', 'pilates', 'qigong',
                'swimming lessons', 'tai chi', 'trainers', 'yoga', 'climbing',
-               'cycling']
+               'cycling', 'workout classes']
 
     category_result = process.extractOne(term, choices)
 
@@ -403,13 +403,33 @@ def show_studio_profile(studio_id):
                         + int(user.cleanliness_pref)
                         + int(user.class_size_pref) + int(user.class_schedule_pref)
                         + int(user.class_pace_pref))
+    else:
+        individual_score = "Set your preferences to get an individualized score for each studio!"
 
     reviews = studio_db.reviews
 
+    #get all tip_texts from reviews with tips included
+    tips = []
+    for review in reviews:
+        if review.tip_text is not None:
+            tip = review.tip_text
+            tips.append(tip)
+
+    #get review count from length of reviews list
     review_count = len(reviews)
 
+    #get list of instructors 
     instructors = studio_db.instructors
 
+    instructor_details = {}
+    #get instructor reviews
+    for instructor in instructors:
+        instructor_details[str(instructor.name)] = []
+        for review in instructor.instructorreviews:
+            instructor_details[str(instructor.name)].append(review.rating)
+
+
+    #create key value pairs to rating and phrase
     pace = {"1": "Didn't break a sweat.",
             "2": "Pretty good workout.",
             "3": "I was dying!"}
@@ -422,7 +442,8 @@ def show_studio_profile(studio_id):
                            instructors=instructors,
                            review_count=review_count,
                            latitude=latitude, longitude=longitude,
-                           pace_rating=pace_rating, individual_score=individual_score)
+                           pace_rating=pace_rating, individual_score=individual_score,
+                           tips=tips, instructor_details=instructor_details)
 
 
 @app.route('/instructor-move-form', methods=["POST"])
@@ -469,7 +490,7 @@ def show_review_form(studio_id):
 def process_review_form():
     """Add input from review form to db and update overall scores"""
 
-    overall_rating = request.form.get("overall_rating")
+    tip_text = request.form.get("tip_text")
     amenities_rating = request.form.get("amenities_rating")
     cleanliness_rating = request.form.get("cleanliness_rating")
     class_size_rating = request.form.get("class_size_rating")
@@ -494,7 +515,7 @@ def process_review_form():
 
     if not existing_review:
         review = Review(user_id=user_id, studio_id=studio_id,
-                        overall_rating=overall_rating,
+                        tip_text=tip_text,
                         amenities_rating=amenities_rating,
                         cleanliness_rating=cleanliness_rating,
                         class_size_rating=class_size_rating,
@@ -504,7 +525,7 @@ def process_review_form():
         db.session.add(review)
         db.session.commit()
     if existing_review:
-        existing_review.overall_rating = overall_rating
+        existing_review.tip_text = tip_text
         existing_review.cleanliness_rating = cleanliness_rating
         existing_review.class_size_rating = class_size_rating
         existing_review.schedule_rating = schedule_rating
@@ -553,7 +574,6 @@ def process_review_form():
     #get number of reviews to use for average
     max_id = len(all_reviews)
 
-    overall_total = 0
     amenities_total = 0
     cleanliness_total = 0
     class_size_total = 0
@@ -561,7 +581,6 @@ def process_review_form():
     class_pace_total = 0
 
     for review in all_reviews:
-        overall_total += int(review.overall_rating)
         amenities_total += int(review.amenities_rating)
         cleanliness_total += int(review.cleanliness_rating)
         class_size_total += int(review.class_size_rating)
@@ -573,7 +592,7 @@ def process_review_form():
     #if not, add this first review to studio db
 
     if len(all_reviews) > 1:
-        studio.overall_rating = (overall_total + (int(overall_rating))) / int(max_id)
+        # studio.overall_rating = (overall_total + (int(overall_rating))) / int(max_id)
         studio.amenities_rating = (amenities_total+ (int(amenities_rating))) / int(max_id)
         studio.cleanliness_rating = (cleanliness_total + (int(cleanliness_rating))) / int(max_id)
         studio.class_size_rating = (class_size_total + (int(class_size_rating))) / int(max_id)
@@ -581,7 +600,7 @@ def process_review_form():
         studio.pace_rating = (class_pace_total + (int(pace_rating))) / int(max_id)
         db.session.commit()
     else:
-        studio.overall_rating = overall_rating
+        # studio.overall_rating = overall_rating
         studio.amenities_rating = amenities_rating
         studio.cleanliness_rating = cleanliness_rating
         studio.class_size_rating = class_size_rating

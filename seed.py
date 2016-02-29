@@ -1,6 +1,6 @@
 from sqlalchemy import func
 
-from random import randint
+from random import randint, choice
 
 from model import User
 from model import Studio
@@ -62,7 +62,7 @@ def generate_reviews():
         for studio in studios:
             review = Review(user_id=user.user_id,
                             studio_id=studio.studio_id,
-                            overall_rating=randint(4, 5),
+                            # overall_rating=randint(4, 5),
                             amenities_rating=randint(4, 5),
                             cleanliness_rating=randint(1, 2),
                             class_size_rating=randint(4, 5),
@@ -107,6 +107,33 @@ def generate_reviews():
 
 #     db.session.commit()
 
+def initial_studio_reviews():
+    """Generate initial reviews for each studio"""
+
+    #get all studios from db
+    studios = Studio.query.all()
+
+    for studio in studios:
+        studio.amenities_rating = randint(3, 5)
+        studio.cleanliness_rating = randint(1, 2)
+        studio.class_size_rating = randint(3, 5)
+        studio.schedule_rating = randint(3, 5)
+        studio.pace_rating = randint(2, 3)
+
+    db.session.commit()
+
+
+def generate_tips():
+    """Create data for tips"""
+
+    #get all reviews from db
+    reviews = Review.query.all()
+
+
+
+
+def generate_instructors():
+    """Create instructors and instructor reviews"""
 
 
 def set_val_user_id():
@@ -133,4 +160,4 @@ if __name__ == "__main__":
 
     generate_reviews()
 
-    # initial_studio_reviews()
+    initial_studio_reviews()

@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div id="bigmap" style="position:fixed; top:50px; left:500px; display:inline-block;"></div>
-
 <div class="container">
 
 <span id="location" data-location={{ location }}></span>
 <span id="term" data-term={{ term }}></span>
+
+<div class="row">
+<div class="col-xs-12 col-md-6 col-lg-offset-6 col-lg-3">
+<div id="bigmap"></div>
+</div>
+</div>
+
 {% for studio in studios %}
 <div class="row">
 <div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3">

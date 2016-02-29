@@ -3,12 +3,16 @@
 
 <h1>Login below:</h1>
 
-<form action='/login-verification' method='POST'>
-    <label for="field-email">Email</label>
-        <input type="text" required name="email" id="field-email">
-    <label for="field-password">Password</label>
-        <input type="password" required name="password" id="field-password">
-    <input type="submit">
+<form action='/login-verification' method='POST' class="form-inline">
+    <div class="form-group">
+    <label for="field-email"></label>
+        <input type="email" required name="email" class="form-control" id="field-email" placeholder="Email">
+    </div>
+    <div class="form-group">
+    <label for="field-password"></label>
+        <input type="password" required name="password" class="form-control" id="field-password" placeholder="Password">
+    </div>
+    <input type="submit" class="btn btn-default">
 </form>
 
 {% endblock %}

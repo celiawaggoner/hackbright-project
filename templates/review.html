@@ -5,34 +5,64 @@
 
 <form action="/review/studio" id="reviewform" method="POST">
     <input type="hidden" name="studio_id" value={{ id }}>
-    <fieldset>
+<!--     <fieldset>
         <legend>Give an overall rating:</legend>
         <div>
+            <label class="radio-inline">
             <input type="radio" name="overall_rating" value="1" required>1
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="overall_rating" value="2">2
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="overall_rating" value="3">3
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="overall_rating" value="4">4
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="overall_rating" value="5">5
+            </label>
         </div>
-    </fieldset>
+    </fieldset> -->
 
     <fieldset>
         <legend>Rate the studio:</legend>
             <p>Amenities</p>
             <div>
+            <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="1" required>1
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="2">2
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="3">3
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="4">4
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="5">5
+            </label>
             </div>
             <p>Cleanliness</p>
             <div>
+            <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="1" required>1
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="2">2
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="3">3
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="4">4
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="5">5
+            </label>
             </div>
     </fieldset>
 
@@ -40,44 +70,86 @@
         <legend>Rate the classes:</legend>
             <p>Class size</p>
             <div>
+            <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="1" required>1
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="2">2
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="3">3
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="4">4
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="5">5
+            </label>
             </div>
             <p>Class schedule</p>
             <div>
+            <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="1" required>1
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="2">2
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="3">3
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="4">4
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="5">5
+            </label>
             </div>
             <p>Class pace</p>
             <div>
+            <label class="radio-inline">
             <input type="radio" name="pace_rating" value="1" required>Didn't break a sweat.
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="pace_rating" value="2">Pretty good workout.
+            </label>
+            <label class="radio-inline">
             <input type="radio" name="pace_rating" value="3">I was dying!
+            </label>
             </div>
     </fieldset>
     <fieldset>
         <legend>Share more about your experience:</legend>
         <label>Who was your instructor?</label>
-        <input type="text" name="name" placeholder="name">
+        <label class="radio-inline">
+        <div class="form-group">
+        <input type="text" name="name" placeholder="Name" class="form-control">
+        </div>
+        </label>
         <p>What'd you think?</p>
+        <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="1">1
+        </label>
+        <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="2">2
+        </label>
+        <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="3">3
+        </label>
+        <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="4">4
+        </label>
+        <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="5">5
-<!--         <p><label>What's been your favorite class or class time?</label></p>
-        <input type="text" name="fav_class" placeholder="favorite class"> -->
+        </label>
+        <p><label>Any other tips to share?</label></p>
+        <div class="form-group">
+        <input type="textarea" name="tip_text" class="form-control" rows="3" style="width: 20%;">
+        </div>
 <!--Need to figure out how to show more forms to review multiple instructors-->
     </fieldset>
 
     <fieldset>
-        <input type="submit" value="Submit" id="reviewsubmit">
+        <input type="submit" value="Submit" id="reviewsubmit" class="btn btn-default">
     </fieldset>
     
 

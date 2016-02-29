@@ -4,28 +4,35 @@
 <h1>Register below:</h1>
 
 <form action='/registration-verification' method='POST'>
+    <div class="form-group">
     <label for="field-firstname">First name:</label>
-        <input type="text" name="firstname" id="field-firstname" required>
-    <br>
+        <input type="text" name="firstname" class="form-control" id="field-firstname" placeholder="First name" style="width:20%" required>
+    </div>
+    <div class="form-group">
     <label for="field-lastname">Last name:</label>
-        <input type="text" name="lastname" id="field-lastname" required>
-    <br>
+        <input type="text" name="lastname" placeholder="Last name" class="form-control" style="width:20%" id="field-lastname" required>
+    </div>
+    <div class="form-group">
     <label for="field-email">Email:</label>
-        <input type="text" name="email" id="field-email" required>
-    <br>
+        <input type="email" name="email" placeholder="Email" class="form-control" style="width:20%" id="field-email" required>
+    </div>
+    <div class="form-group">
     <label for="field-password">Password:</label>
-        <input type="password" name="password" id="field-password" required>
-    <br>
+        <input type="password" name="password" placeholder="Password" class="form-control" style="width:20%" id="field-password" required>
+    </div>
+    <div class="form-group">
     <label for="field-city">City:</label>
-        <input type="text" name="city" id="field-city" required>
-    <br>
+        <input type="text" name="city" placeholder="City" class="form-control" style="width:20%" id="field-city" required>
+    </div>
+    <div class="form-group">
     <label for="field-state">State:</label>
-        <input type="text" name="state" id="field-state" required>
-    <br>
+        <input type="text" name="state" placeholder="State" class="form-control" style="width:20%" id="field-state" required>
+    </div>
+    <div class="form-group">
     <label for="field-zipcode">Zipcode:</label>
-        <input type="text" name="zipcode" id="field-zipcode" required>
-    <br>
-    <input type="submit">
+        <input type="number" name="zipcode" placeholder="Zipcode" class="form-control" style="width:20%" id="field-zipcode" required>
+    </div>
+    <input type="submit" class="btn btn-default">
 </form>
 
 {% endblock %}

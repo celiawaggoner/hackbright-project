@@ -2,13 +2,17 @@
 {% block content %}
 
 <div id="homepagesearch">
-    <form action="/studios">
+    <form action="/studios" class="form-inline">
     <label><h1 id="homepageheader">Discover new workout classes:</h1>
-        <input type="text" name="location" placeholder="Location" required>
-        <input type="text" name="term" placeholder="Activity or Studio" required>
+        <div class="form-group">
+        <input type="text" name="location" class="form-control" placeholder="Location" required>
+        </div>
+        <div class="form-group">
+        <input type="text" name="term" class="form-control" placeholder="Activity or Studio" required>
+        </div>
     </label>
     <br>
-    <input type="submit" value="Search">
+    <input type="submit" value="Search" class="btn btn-default">
     </form>
 </div>
 
