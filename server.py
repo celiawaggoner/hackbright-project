@@ -140,18 +140,23 @@ def show_user_profile(user_id):
     # import pdb
     # pdb.set_trace()
 
-    preference_phrases = {"1": "Doesn't matter",
+    preference_phrases = {"1": "Doesn't matter.",
                           "2": "Meh.",
                           "3": "Super important!"}
 
-    amenities = preference_phrases.get(user.amenities_pref)
+    amenities = preference_phrases.get(str(user.amenities_pref))
+    cleanliness = preference_phrases.get(str(user.cleanliness_pref))
+    class_size = preference_phrases.get(str(user.class_size_pref))
+    schedule = preference_phrases.get(str(user.class_schedule_pref))
+    pace = preference_phrases.get(str(user.class_pace_pref))
 
     return render_template("user_profile.html", first_name=first_name,
                            last_name=last_name, city=city, state=state,
                            favorites=favorites, reviews=reviews,
                            instructor_reviews=instructor_reviews,
-                           user=user, preference_phrases=preference_phrases,
-                           amenities=amenities)
+                           user=user, amenities=amenities,
+                           cleanliness=cleanliness, class_size=class_size,
+                           schedule=schedule, pace=pace)
 
 
 @app.route('/preferences.json')
@@ -357,6 +362,9 @@ def show_studio_profile(studio_id):
 
     user_id = session['user']
 
+    #get user from db
+    user = User.query.filter(User.user_id == user_id).one()
+
     params = {
         'term': name,
         'location': zipcode,
@@ -382,18 +390,39 @@ def show_studio_profile(studio_id):
     #get studio from db
     studio_db = Studio.query.filter(Studio.studio_id == studio_id).one()
 
+    # import pdb
+    # pdb.set_trace()
+
+    #use weighted average to create user-specific score for this studio
+    if user.amenities_pref:
+        individual_score = ((int(user.amenities_pref) * int(studio_db.amenities_rating))
+                        + (int(user.cleanliness_pref) * int(studio_db.cleanliness_rating))
+                        + (int(user.class_size_pref) * int(studio_db.class_size_rating))
+                        + (int(user.class_schedule_pref) * int(studio_db.schedule_rating))
+                        + (int(user.class_pace_pref) * int(studio_db.pace_rating))) / (int(user.amenities_pref)
+                        + int(user.cleanliness_pref)
+                        + int(user.class_size_pref) + int(user.class_schedule_pref)
+                        + int(user.class_pace_pref))
+
     reviews = studio_db.reviews
 
     review_count = len(reviews)
 
-    instructors = studio_db.instructors      
+    instructors = studio_db.instructors
+
+    pace = {"1": "Didn't break a sweat.",
+            "2": "Pretty good workout.",
+            "3": "I was dying!"}
+
+    pace_rating = pace.get(str(studio_db.pace_rating))
 
     return render_template("studio_profile.html", studios=studios,
                            name=name, zipcode=zipcode, favorited=favorited,
                            id=id, studio_db=studio_db, reviews=reviews,
                            instructors=instructors,
                            review_count=review_count,
-                           latitude=latitude, longitude=longitude)
+                           latitude=latitude, longitude=longitude,
+                           pace_rating=pace_rating, individual_score=individual_score)
 
 
 @app.route('/instructor-move-form', methods=["POST"])

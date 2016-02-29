@@ -22,7 +22,12 @@ body {
 }
 
 #profile {
-    height: 175px;
-    width: 130px;
+    height: 250px;
+    width: 200px;
     border-radius: 20px;
+}
+
+#bigmap {
+    position: fixed;
+    top: 50px;
 }
