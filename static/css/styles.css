@@ -33,3 +33,9 @@ body {
     border-radius: 10px;
     border: 1px solid black;
 }
+#studio_pic {
+    border-radius: 10px;
+    border: 1px solid black;
+    height: 100px;
+    width: 100px;
+}

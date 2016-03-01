@@ -8,7 +8,7 @@
 
 {% for studio in studios %}
 <div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3">
-    <img src="{{ studio.image_url }}">
+    <!-- <img id="studio_pic" src="{{ studio.image_url }}"> -->
     <h3>{{ studio.name }}</h3>
     <p><img src ="{{ studio.rating_img_url }}"><img style="width:60px; height:30px" src="/static/img/yelp.png"></p>
     <h4>Categories:</h4>
@@ -28,8 +28,8 @@
     {% if 1 > review_count %}
     <p>This studio hasn't been reviewed yet.</p>
     {% else %}
-    <h6>Review count: {{ review_count }}</h6>
-    <p>{{ individual_score }}</p>
+    <h5>Review count: {{ review_count }}</h5>
+    <p>Individualized Score: {{ individual_score }}</p>
     <p>Amenities score: {{ studio_db.amenities_rating }}</p>
     <p>Cleanliness score: {{ studio_db.cleanliness_rating }}</p>
     <p>Class size score: {{ studio_db.class_size_rating }}</p>
@@ -46,7 +46,7 @@
         <button class="btn btn-default" style="color:red" id="favorite" data-id={{ id }}>
             <span class="glyphicon glyphicon-heart"></span> Favorite
         </button>
-        <span id="notes"></span>
+        <br>
         <span id="favorite-studio">This is one of your favorites!</span>
     </div>
     {% endif %}
@@ -89,21 +89,29 @@
 </div> <!--closing row -->
 
 <div class="row">
-<div>
+<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-9" class=" table">
     <h4>Studio Reviews:</h4>
     {% if 1 > review_count %}
     <p>Be the first to review this studio!</p>
     {% endif %}
-    <ul>
+    <table class="table table-bordered table-condensed"> 
+    <tr>
+      <th>Amenities Rating</th>
+      <th>Cleanliness Rating</th>
+      <th>Class Size Rating</th>
+      <th>Schedule Rating</th>
+      <th>Pace Rating</th>
+    </tr>
     {% for review in reviews[:5] %}
-    <li>Amenities rating: {{ review.amenities_rating }},
-        Cleanliness rating: {{ review.cleanliness_rating }},
-        Class size rating: {{ review.class_size_rating }},
-        Schedule rating: {{ review.schedule_rating }},
-        Pace rating: {{ review.pace_rating }}
-    </li>
+    <tr>
+        <td>{{ review.amenities_rating }}</td>
+        <td>{{ review.cleanliness_rating }}</td>
+        <td>{{ review.class_size_rating }}</td>
+        <td>{{ review.schedule_rating }}</td>
+        <td>{{ review.pace_rating }}</td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
 </div>
 
 

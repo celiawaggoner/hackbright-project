@@ -5,31 +5,11 @@
 
 <form action="/review/studio" id="reviewform" method="POST">
     <input type="hidden" name="studio_id" value={{ id }}>
-<!--     <fieldset>
-        <legend>Give an overall rating:</legend>
-        <div>
-            <label class="radio-inline">
-            <input type="radio" name="overall_rating" value="1" required>1
-            </label>
-            <label class="radio-inline">
-            <input type="radio" name="overall_rating" value="2">2
-            </label>
-            <label class="radio-inline">
-            <input type="radio" name="overall_rating" value="3">3
-            </label>
-            <label class="radio-inline">
-            <input type="radio" name="overall_rating" value="4">4
-            </label>
-            <label class="radio-inline">
-            <input type="radio" name="overall_rating" value="5">5
-            </label>
-        </div>
-    </fieldset> -->
-
     <fieldset>
         <legend>Rate the studio:</legend>
             <p>Amenities</p>
             <div>
+            <p>None!</p>
             <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="1" required>1
             </label>
@@ -45,9 +25,11 @@
             <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="5">5
             </label>
+            <p>Showers and lockers galore!</p>
             </div>
             <p>Cleanliness</p>
             <div>
+            <p>So gross.</p>
             <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="1" required>1
             </label>
@@ -63,6 +45,7 @@
             <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="5">5
             </label>
+            <p>Spotless!</p>
             </div>
     </fieldset>
 
@@ -70,6 +53,7 @@
         <legend>Rate the classes:</legend>
             <p>Class size</p>
             <div>
+            <p>Always way too crowded.</p>
             <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="1" required>1
             </label>
@@ -85,9 +69,11 @@
             <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="5">5
             </label>
+            <p>Never too packed!</p>
             </div>
             <p>Class schedule</p>
             <div>
+            <p>Can never find a class that works for me.</p>
             <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="1" required>1
             </label>
@@ -103,6 +89,7 @@
             <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="5">5
             </label>
+            <p>Plenty of options throughout the week!</p>
             </div>
             <p>Class pace</p>
             <div>

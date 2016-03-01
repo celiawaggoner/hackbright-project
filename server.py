@@ -141,8 +141,8 @@ def show_user_profile(user_id):
     # pdb.set_trace()
 
     preference_phrases = {"1": "Doesn't matter.",
-                          "2": "Meh.",
-                          "3": "Super important!"}
+                          "5": "Meh.",
+                          "10": "Super important!"}
 
     amenities = preference_phrases.get(str(user.amenities_pref))
     cleanliness = preference_phrases.get(str(user.cleanliness_pref))

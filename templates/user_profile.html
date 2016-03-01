@@ -19,16 +19,14 @@
     <ul>
     {% for favorite in favorites %}
     <a href="/studios/{{ favorite.studio_id }}">
-        <p style="font-weight:bold"><span style="color:red" class="glyphicon glyphicon-heart"></span> {{ favorite.studio.name }}</p>
+        <p style="font-weight:bold;"><span style="color:red" class="glyphicon glyphicon-heart"></span> {{ favorite.studio.name }}</p>
     </a>
     <span id="notes"></span>
     {% endfor %}
     </ul>
 </div>
 
-</div> <!-- closing row -->
 
-<div class="row">
 
 <div id="preferences" class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3">
     <h4>Studio Preferences:</h4>
@@ -60,36 +58,36 @@
                   <label for="amenities">How important are the amenities? (showers, lockers, etc.)</label>
                   <br>
                   <input type="radio" name="amenities" value="1" required>Doesn't matter.
-                  <input type="radio" name="amenities" value="2">Meh.
-                  <input type="radio" name="amenities" value="3">Super important!
+                  <input type="radio" name="amenities" value="5">Meh.
+                  <input type="radio" name="amenities" value="10">Super important!
                 </div>
                 <div class="form-group">
                  <label for="cleanliness">Cleanliness?</label>
                   <br>
                   <input type="radio" name="cleanliness" value="1" required>Doesn't matter.
-                  <input type="radio" name="cleanliness" value="2">Meh.
-                  <input type="radio" name="cleanliness" value="3">Super important!
+                  <input type="radio" name="cleanliness" value="5">Meh.
+                  <input type="radio" name="cleanliness" value="10">Super important!
                 </div>
                 <div class="form-group">
                  <label for="class_size">Class size? (do you want to avoid crowds?)</label>
                  <br>
                  <input type="radio" name="class_size" value="1" required>Doesn't matter.
-                 <input type="radio" name="class_size" value="2">Meh.
-                 <input type="radio" name="class_size" value="3">Super important!
+                 <input type="radio" name="class_size" value="5">Meh.
+                 <input type="radio" name="class_size" value="10">Super important!
                 </div>
                 <div class="form-group">
                  <label for="class_schedule">Class schedule? (do you need a wide range of class times?)</label>
                   <br>
                   <input type="radio" name="class_schedule" value="1" required>Doesn't matter.
-                  <input type="radio" name="class_schedule" value="2">Meh.
-                  <input type="radio" name="class_schedule" value="3">Super important!
+                  <input type="radio" name="class_schedule" value="5">Meh.
+                  <input type="radio" name="class_schedule" value="10">Super important!
                 </div>
                 <div class="form-group">
                  <label for="class_pace">Class pace? (the intenser the better?)</label>
                   <br>
                   <input type="radio" name="class_pace" value="1" required>Doesn't matter.
-                  <input type="radio" name="class_pace" value="2">Meh.
-                  <input type="radio" name="class_pace" value="3">Super important!
+                  <input type="radio" name="class_pace" value="5">Meh.
+                  <input type="radio" name="class_pace" value="10">Super important!
                 </div>
                 <button type="submit" class="btn btn-default btn-success btn-block" id="prefsubmit">Update</button>
               </form>
@@ -102,23 +100,34 @@
       </div> 
 
 </div>
+</div> <!-- closing row -->
 
 
-
-
-<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3">
+<div class="row">
+<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-9" class=" table">
     <h4>My Reviews:</h4>
+    <table class="table table-bordered table-condensed"> 
+    <tr>
+      <th>Studio Name</th>
+      <th>Amenities Rating</th>
+      <th>Cleanliness Rating</th>
+      <th>Class Size Rating</th>
+      <th>Schedule Rating</th>
+      <th>Pace Rating</th>
+    </tr>
     {% for review in reviews %}
-    <ul>
-        <li style="font-weight:bold"><a href="/studios/{{ review.studio_id }}">{{ review.studio.name }}</a></li>
-        <li>Amenities rating: {{ review.amenities_rating }}</li>
-        <li>Cleanliness rating: {{ review.cleanliness_rating }}</li>
-        <li>Class size rating: {{ review.class_size_rating }}</li>
-        <li>Schedule rating: {{ review.schedule_rating }}</li>
-        <li>Pace rating: {{ review.pace_rating }}</li>
-    </ul>
+    <tr>
+        <td style="font-weight:bold"><a href="/studios/{{ review.studio_id }}">{{ review.studio.name }}</a></td>
+        <td>{{ review.amenities_rating }}</td>
+        <td>{{ review.cleanliness_rating }}</td>
+        <td>{{ review.class_size_rating }}</td>
+        <td>{{ review.schedule_rating }}</td>
+        <td>{{ review.pace_rating }}</td>
+    </tr>
     {% endfor %}
+    </table>
 </div>
+</div> <!-- closing row -->
 <div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3">
     <h4>My Instructor Reviews:</h4>
     {% for review in instructor_reviews %}
@@ -131,7 +140,7 @@
     {% endif %}
     {% endfor %}
 </div>
-</div> <!-- closing row -->
+
 </div> <!--closing container -->
 
 <script>

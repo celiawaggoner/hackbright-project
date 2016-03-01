@@ -114,10 +114,10 @@ def initial_studio_reviews():
     studios = Studio.query.all()
 
     for studio in studios:
-        studio.amenities_rating = randint(3, 5)
+        studio.amenities_rating = randint(4, 5)
         studio.cleanliness_rating = randint(1, 2)
-        studio.class_size_rating = randint(3, 5)
-        studio.schedule_rating = randint(3, 5)
+        studio.class_size_rating = randint(4, 5)
+        studio.schedule_rating = randint(4, 5)
         studio.pace_rating = randint(2, 3)
 
     db.session.commit()
