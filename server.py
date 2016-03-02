@@ -136,10 +136,6 @@ def show_user_profile(user_id):
     instructor_reviews = user.instructorreviews
 
     #make key/value pairs for ratings and phrases
-
-    # import pdb
-    # pdb.set_trace()
-
     preference_phrases = {"1": "Doesn't matter.",
                           "5": "Meh.",
                           "10": "Super important!"}
@@ -343,9 +339,6 @@ def get_studio_location():
         results[str(studio.name)] = {"latitude": float(str(studio.location.coordinate.latitude)),
                                      "longitude": float(str(studio.location.coordinate.longitude))}
 
-    # import pdb
-    # pdb.set_trace()
-
 
     return jsonify(results)
 
@@ -377,9 +370,6 @@ def show_studio_profile(studio_id):
     #studios is list of studios in response
     studios = response.businesses
 
-    # import pdb
-    # pdb.set_trace()
-
     #get lat and long for google map
     for studio in studios:
         latitude = float(str(studio.location.coordinate.latitude))
@@ -390,8 +380,31 @@ def show_studio_profile(studio_id):
     #get studio from db
     studio_db = Studio.query.filter(Studio.studio_id == studio_id).one()
 
-    # import pdb
-    # pdb.set_trace()
+    reviews = studio_db.reviews
+
+    #get all tip_texts from reviews with tips included
+    tips = []
+    for review in reviews:
+        if review.tip_text is not None:
+            tip = review.tip_text
+            tips.append(tip)
+
+    #get review count from length of reviews list
+    review_count = len(reviews)
+
+    #create key value pairs for star ratings
+    stars = {"None": "None",
+             "1": ['*'],
+             "2": ['*', '*'],
+             "3": ['*', '*', '*'],
+             "4": ['*', '*', '*', '*'],
+             "5": ['*', '*', '*', '*', '*']}
+
+    empties = {"5": [],
+               "4": ['*'],
+               "3": ['*', '*'],
+               "2": ['*', '*', '*'],
+               "1": ['*', '*', '*', '*']}
 
     #use weighted average to create user-specific score for this studio
     if user.amenities_pref:
@@ -406,17 +419,18 @@ def show_studio_profile(studio_id):
     else:
         individual_score = "Set your preferences to get an individualized score for each studio!"
 
-    reviews = studio_db.reviews
+    individual_stars = stars.get(str(individual_score))
+    individual_empties = empties.get(str(individual_score))
 
-    #get all tip_texts from reviews with tips included
-    tips = []
-    for review in reviews:
-        if review.tip_text is not None:
-            tip = review.tip_text
-            tips.append(tip)
+    amenities_stars = stars.get(str(studio_db.amenities_rating))
+    cleanliness_stars = stars.get(str(studio_db.cleanliness_rating))
+    class_size_stars = stars.get(str(studio_db.class_size_rating))
+    schedule_stars = stars.get(str(studio_db.schedule_rating))
 
-    #get review count from length of reviews list
-    review_count = len(reviews)
+    amenities_empties = empties.get(str(studio_db.amenities_rating))
+    cleanliness_empties = empties.get(str(studio_db.cleanliness_rating))
+    class_size_empties = empties.get(str(studio_db.class_size_rating))
+    schedule_empties = empties.get(str(studio_db.schedule_rating))
 
     #get list of instructors 
     instructors = studio_db.instructors
@@ -442,8 +456,17 @@ def show_studio_profile(studio_id):
                            instructors=instructors,
                            review_count=review_count,
                            latitude=latitude, longitude=longitude,
-                           pace_rating=pace_rating, individual_score=individual_score,
-                           tips=tips, instructor_details=instructor_details)
+                           pace_rating=pace_rating, individual_stars=individual_stars,
+                           tips=tips, instructor_details=instructor_details,
+                           amenities_stars=amenities_stars,
+                           cleanliness_stars=cleanliness_stars,
+                           class_size_stars=class_size_stars,
+                           schedule_stars=schedule_stars,
+                           amenities_empties=amenities_empties,
+                           cleanliness_empties=cleanliness_empties,
+                           class_size_empties=class_size_empties,
+                           schedule_empties=schedule_empties,
+                           individual_empties=individual_empties)
 
 
 @app.route('/instructor-move-form', methods=["POST"])

@@ -29,11 +29,45 @@
     <p>This studio hasn't been reviewed yet.</p>
     {% else %}
     <h5>Review count: {{ review_count }}</h5>
-    <h5>Individualized Score: {{ individual_score }}</h5>
-    <h5>Amenities score: {{ studio_db.amenities_rating }}</h5>
-    <h5>Cleanliness score: {{ studio_db.cleanliness_rating }}</h5>
-    <h5>Class size score: {{ studio_db.class_size_rating }}</h5>
-    <h5>Schedule score: {{ studio_db.schedule_rating }}</h5>
+    <h5>Individualized Score: {% if individual_stars %}
+                                {% for star in individual_stars %}
+                                <span class="glyphicon glyphicon-star"></span>
+                                {% endfor %}
+                                {% for star in individual_empties %}
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                 {% endfor %}
+                              {% else %}
+                              <p>Set your preferences to get an individualized score for each studio!</p>
+                              {% endif %}
+    </h5>
+    <h5>Amenities score: {% for star in amenities_stars%}
+                        <span class="glyphicon glyphicon-star"></span>
+                         {% endfor %}
+                         {% for star in amenities_empties %}
+                         <span class="glyphicon glyphicon-star-empty"></span>
+                          {% endfor %}
+    </h5>
+    <h5>Cleanliness score: {% for star in cleanliness_stars %}
+                            <span class="glyphicon glyphicon-star"></span>
+                            {% endfor %}
+                            {% for star in cleanliness_empties %}
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                             {% endfor %}
+    </h5>
+    <h5>Class size score: {% for star in class_size_stars %}
+                          <span class="glyphicon glyphicon-star"></span>
+                          {% endfor %}
+                          {% for star in class_size_empties %}
+                          <span class="glyphicon glyphicon-star-empty"></span>
+                           {% endfor %}
+    </h5>
+    <h5>Schedule score: {% for star in schedule_stars %}
+                        <span class="glyphicon glyphicon-star"></span>
+                        {% endfor %}
+                        {% for star in schedule_empties %}
+                        <span class="glyphicon glyphicon-star-empty"></span>
+                         {% endfor %}
+    </h5>
     <h5>What people are saying about the pace of this class: 
     {{ pace_rating }}
     </h5>

@@ -168,6 +168,17 @@ def example_data_users():
     db.session.add_all([celia, pam, amber])
     db.session.commit()
 
+def example_data_studios():
+    """Create sample studio data"""
+
+    #Empty out existing data
+    Studio.query.delete()
+
+    yoga = Studio(studio_id=1, name="Yoga", zipcode="94110")
+
+    db.session.add(yoga)
+    db.session.commit
+
 
 ##############################################################################
 # Helper functions

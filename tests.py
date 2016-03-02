@@ -1,4 +1,4 @@
-from model import User, Studio, Review, Favorite, Instructor, InstructorReview, example_data_users, connect_to_db, db
+from model import User, Studio, Review, Favorite, Instructor, InstructorReview, example_data_users, example_data_studios, connect_to_db, db
 from server import app
 import server
 from unittest import TestCase
@@ -21,6 +21,7 @@ class FlaskTests(TestCase):
         # Create tables and add sample data
         db.create_all()
         example_data_users()
+        example_data_studios()
 
 
         # initiate a session
@@ -157,6 +158,8 @@ class FlaskTests(TestCase):
         response = self.client.get("/unfavorite/studio")
 
         self.assertIsInstance(response, object)
+
+
 
 #############################################################################
 
