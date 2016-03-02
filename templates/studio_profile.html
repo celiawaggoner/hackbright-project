@@ -29,14 +29,14 @@
     <p>This studio hasn't been reviewed yet.</p>
     {% else %}
     <h5>Review count: {{ review_count }}</h5>
-    <p>Individualized Score: {{ individual_score }}</p>
-    <p>Amenities score: {{ studio_db.amenities_rating }}</p>
-    <p>Cleanliness score: {{ studio_db.cleanliness_rating }}</p>
-    <p>Class size score: {{ studio_db.class_size_rating }}</p>
-    <p>Schedule score: {{ studio_db.schedule_rating }}</p>
-    <p>What people are saying about the pace of this class: 
+    <h5>Individualized Score: {{ individual_score }}</h5>
+    <h5>Amenities score: {{ studio_db.amenities_rating }}</h5>
+    <h5>Cleanliness score: {{ studio_db.cleanliness_rating }}</h5>
+    <h5>Class size score: {{ studio_db.class_size_rating }}</h5>
+    <h5>Schedule score: {{ studio_db.schedule_rating }}</h5>
+    <h5>What people are saying about the pace of this class: 
     {{ pace_rating }}
-    </p>
+    </h5>
     {% endif %}
     {% if session.user %}
     <p><a href="/write-a-review/{{ id }}"><button type="button" class="btn btn-default">Review this studio</button></a></p>

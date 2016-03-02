@@ -139,16 +139,45 @@ class InstructorReview(db.Model):
     #Define relationship to instructor 
     instructor = db.relationship("Instructor", backref="instructorreviews")
 
+#############################################################################
+# Add example data for testing
+
+
+def example_data_users():
+    """Create sample user data"""
+
+    #Empty out existing data
+    User.query.delete()
+
+    celia = User(user_id=2, first_name='Celia', last_name='Waggoner',
+                 email="celia@test.com", password="123", city="San Francisco",
+                 state="CA", zipcode='94110',
+                 amenities_pref=1, cleanliness_pref=5, class_size_pref=10,
+                 class_schedule_pref=5, class_pace_pref=1)
+    pam = User(user_id=3, first_name='Pam', last_name='Geick',
+               email="pam@test.com", password="456", city="Rocky River",
+               state="OH", zipcode='44116',
+               amenities_pref=1, cleanliness_pref=1, class_size_pref=1,
+               class_schedule_pref=1, class_pace_pref=1)
+    amber = User(user_id=4, first_name='Amber', last_name='Lynn',
+                 email="amber@fake.com", password="789", city="Brooklyn",
+                 state="NY", zipcode='11201',
+                 amenities_pref=10, cleanliness_pref=10, class_size_pref=10,
+                 class_schedule_pref=10, class_pace_pref=10)
+
+    db.session.add_all([celia, pam, amber])
+    db.session.commit()
+
 
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri='postgresql:///project'):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
     # after /// is database name
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///project'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     db.app = app
     db.init_app(app)
 
@@ -160,3 +189,4 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print "Connected to DB."
+  
