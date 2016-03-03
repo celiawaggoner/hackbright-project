@@ -1,15 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="container">
+
+<div class="row">
+
+<div class="col-xs-12 col-md-6 col-lg-9">
+
 <h2>Write a review!</h2>
 
 <form action="/review/studio" id="reviewform" method="POST">
     <input type="hidden" name="studio_id" value={{ id }}>
     <fieldset>
         <legend>Rate the studio:</legend>
-            <p>Amenities</p>
+            <h4>Amenities</h4>
             <div>
-            <p>None!</p>
+            <span>None.</span>
             <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="1" required>1
             </label>
@@ -25,11 +31,11 @@
             <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="5">5
             </label>
-            <p>Showers and lockers galore!</p>
+            <span>Showers and lockers galore!</span>
             </div>
-            <p>Cleanliness</p>
+            <h4>Cleanliness</h4>
             <div>
-            <p>So gross.</p>
+            <span>So gross.</span>
             <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="1" required>1
             </label>
@@ -45,15 +51,15 @@
             <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="5">5
             </label>
-            <p>Spotless!</p>
+            <span>Spotless!</span>
             </div>
     </fieldset>
 
     <fieldset>
         <legend>Rate the classes:</legend>
-            <p>Class size</p>
+            <h4>Class size</h4>
             <div>
-            <p>Always way too crowded.</p>
+            <span>Always way too crowded.</span>
             <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="1" required>1
             </label>
@@ -69,11 +75,11 @@
             <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="5">5
             </label>
-            <p>Never too packed!</p>
+            <span>Never too packed!</span>
             </div>
-            <p>Class schedule</p>
+            <h4>Class schedule</h4>
             <div>
-            <p>Can never find a class that works for me.</p>
+            <span>Can never find a class that works for me.</span>
             <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="1" required>1
             </label>
@@ -89,9 +95,9 @@
             <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="5">5
             </label>
-            <p>Plenty of options throughout the week!</p>
+            <span>Plenty of options throughout the week!</span>
             </div>
-            <p>Class pace</p>
+            <h4>Class pace</h4>
             <div>
             <label class="radio-inline">
             <input type="radio" name="pace_rating" value="1" required>Didn't break a sweat.
@@ -113,6 +119,7 @@
         </div>
         </label>
         <p>What'd you think?</p>
+        <span>Never again!</span>
         <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="1">1
         </label>
@@ -128,9 +135,10 @@
         <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="5">5
         </label>
+        <span>Best ever!</span>
         <p><label>Any other tips to share?</label></p>
         <div class="form-group">
-        <input type="textarea" name="tip_text" class="form-control" rows="3" style="width: 20%;">
+        <input type="textarea" name="tip_text" class="form-control" rows="3" style="width: 50%;">
         </div>
 <!--Need to figure out how to show more forms to review multiple instructors-->
     </fieldset>
@@ -138,10 +146,10 @@
     <fieldset>
         <input type="submit" value="Submit" id="reviewsubmit" class="btn btn-default">
     </fieldset>
-    
-
 </form>
 
-
+</div> <!--close column-->
+</div> <!--close row-->
+</div> <!--close container-->
 
 {% endblock %}

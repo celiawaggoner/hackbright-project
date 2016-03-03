@@ -7,7 +7,7 @@
 <div class="row">
 
 {% for studio in studios %}
-<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3">
+<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3" id="studio_overview">
     <!-- <img id="studio_pic" src="{{ studio.image_url }}"> -->
     <h3>{{ studio.name }}</h3>
     <p><img src ="{{ studio.rating_img_url }}"><img style="width:60px; height:30px" src="/static/img/yelp.png"></p>
@@ -23,7 +23,7 @@
 </div>
 
 
-<div class="col-xs-12 col-md-6 col-lg-push-2 col-lg-3">
+<div class="col-xs-12 col-md-6 col-lg-push-2 col-lg-3" id="ratings">
     <h4>Ratings:</h4>
     {% if 1 > review_count %}
     <p>This studio hasn't been reviewed yet.</p>
@@ -98,18 +98,17 @@
     {% endif %}
 </div>
 
-<div class="col-xs-12 col-md-6 col-lg-push-2 col-lg-3">
+<div class="col-xs-12 col-md-6 col-lg-push-2 col-lg-3" id="top">
     <h4>Top Instructors:</h4>
-    {% for key, value in instructor_details.iteritems() %}
-        {% if key %}
-          <p>Name: {{ key }} 
-            Ratings: 
-            {% for item in value %}
-            <span>{{ item }}</span>
+          <p>Name: {{ top_instructor }} 
+            Rating: 
+            {% for star in instructor_stars %}
+            <span class="glyphicon glyphicon-star"></span>
+            {% endfor %}
+            {% for star in instructor_empties %}
+            <span class="glyphicon glyphicon-star-empty"></span>
             {% endfor %}
           </p>
-        {% endif %}
-    {% endfor %}
     <h4>Tips:</h4>
     <ul>
     {% for tip in tips[:5] %}
@@ -124,11 +123,11 @@
 
 <div class="row">
 <div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-9" class=" table">
-    <h4>Studio Reviews:</h4>
     {% if 1 > review_count %}
     <p>Be the first to review this studio!</p>
     {% endif %}
     <table class="table table-bordered table-condensed"> 
+    <caption><h4>Studio Reviews:</caption></h4>
     <tr>
       <th>Amenities Rating</th>
       <th>Cleanliness Rating</th>
@@ -136,7 +135,7 @@
       <th>Schedule Rating</th>
       <th>Pace Rating</th>
     </tr>
-    {% for review in reviews[:5] %}
+    {% for review in reviews[:10] %}
     <tr>
         <td>{{ review.amenities_rating }}</td>
         <td>{{ review.cleanliness_rating }}</td>
@@ -147,20 +146,30 @@
     {% endfor %}
     </table>
 </div>
+</div> <!--closing row -->
 
-
-<div>
-    <h4>Instructor Reviews:</h4>
-    {% if instructors %}
-    <h6>Let us know if an instructor has switched studios by clicking the button by their name.</h6>
-    {% endif %}
-    <ul>
     {% for instructor in instructors %}
-        {% for review in instructor.instructorreviews %}
-            {% if review.instructor.name %}
-                <p>Name: {{ review.instructor.name }} Rating: {{ review.rating }}</p>
+    <div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-offset-1 col-lg-3" class="table">
+    <table class="table table-bordered table-condensed"> 
+    {% if instructors %}
+    <caption><h4>Instructor Reviews:</h4></caption>
+    <caption><h5>Let us know if an instructor has switched studios by clicking the button by their name.</h5></caption>
+    {% endif %}
+    <tr>
+      <th>Instructor Name</th>
+      <th>Rating</th>
+    </tr>
+    {% for review in instructor.instructorreviews %}
+        {% if review.instructor.name %}
+            <tr>
+            <td>{{ review.instructor.name }}</td>
+            <td>{{ review.rating }}</td>
+            </tr>
+    </table>
+    </div> <!--close column-->
+    <div class="col-xs-12 col-md-6 col-lg-1">
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="instructorbtn"><span class="glyphicon glyphicon-edit"></span></button>
-
                 <!-- Modal -->
                 <div id="myModal" class="modal fade" role="dialog">
                   <div class="modal-dialog">
@@ -205,10 +214,9 @@
             {% endif %}
         {% endfor %}
     {% endfor %}
-    </ul>
-</div>
+</div> <!-- close column -->
+</div> <!-- close row -->
 
-</div> <!--closing row -->
 
 {% endfor %}
 

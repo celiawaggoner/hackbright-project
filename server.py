@@ -393,7 +393,7 @@ def show_studio_profile(studio_id):
     review_count = len(reviews)
 
     #create key value pairs for star ratings
-    stars = {"None": "None",
+    stars = {"0": [],
              "1": ['*'],
              "2": ['*', '*'],
              "3": ['*', '*', '*'],
@@ -404,7 +404,8 @@ def show_studio_profile(studio_id):
                "4": ['*'],
                "3": ['*', '*'],
                "2": ['*', '*', '*'],
-               "1": ['*', '*', '*', '*']}
+               "1": ['*', '*', '*', '*'],
+               "0": []}
 
     #use weighted average to create user-specific score for this studio
     if user.amenities_pref:
@@ -436,12 +437,25 @@ def show_studio_profile(studio_id):
     instructors = studio_db.instructors
 
     instructor_details = {}
-    #get instructor reviews
+    #get instructor average rating
+
     for instructor in instructors:
         instructor_details[str(instructor.name)] = []
         for review in instructor.instructorreviews:
             instructor_details[str(instructor.name)].append(review.rating)
+            average = sum(instructor_details[str(instructor.name)]) / len(instructor_details[str(instructor.name)])
+        instructor_details[str(instructor.name)] = average
+        instructor_stars = stars.get(str(average))
+        instructor_empties = empties.get(str(average))
 
+    if len(instructor_details) > 0:
+        top_instructor = max(instructor_details, key=instructor_details.get)
+        instructor_stars = stars.get(str(instructor_details[top_instructor]))
+        instructor_empties = empties.get(str(instructor_details[top_instructor]))
+    else:
+        top_instructor = "Review this studio to rate your instructor!"
+        instructor_stars = stars.get("0")
+        instructor_empties = empties.get("0")
 
     #create key value pairs to rating and phrase
     pace = {"1": "Didn't break a sweat.",
@@ -466,7 +480,10 @@ def show_studio_profile(studio_id):
                            cleanliness_empties=cleanliness_empties,
                            class_size_empties=class_size_empties,
                            schedule_empties=schedule_empties,
-                           individual_empties=individual_empties)
+                           individual_empties=individual_empties,
+                           instructor_stars=instructor_stars,
+                           instructor_empties=instructor_empties,
+                           top_instructor=top_instructor)
 
 
 @app.route('/instructor-move-form', methods=["POST"])
