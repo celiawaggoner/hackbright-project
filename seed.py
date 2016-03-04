@@ -1,20 +1,13 @@
 from sqlalchemy import func
 
-from random import randint, choice
+from random import randint
 
 from model import User
 from model import Studio
 from model import Review
-from model import Instructor
-from model import InstructorReview
-from model import Favorite
 
 from model import connect_to_db, db
 from server import app
-
-# from faker import Faker
-# fake = Faker()
-# fake.seed(4321)
 
 
 def load_users():
@@ -45,7 +38,6 @@ def load_users():
     db.session.commit()
 
 
-
 def generate_reviews():
 
     print "Reviews"
@@ -73,42 +65,10 @@ def generate_reviews():
     db.session.commit()
 
 
-# def initial_studio_reviews():
-#     """Generate initial reviews for each studio"""
-
-#     #get all studios from db
-#     studios = Studio.query.all()
-
-#     overall_total = 0
-#     amenities_total = 0
-#     cleanliness_total = 0
-#     class_size_total = 0
-#     class_schedule_total = 0
-#     class_pace_total = 0
-
-#     import pdb
-#     pdb.set_trace()
-
-#     for studio in studios:
-#         num_reviews = len(studio.reviews)
-#         for review in studio.reviews:
-#             overall_total += int(review.overall_rating)
-#             amenities_total += int(review.amenities_rating)
-#             cleanliness_total += int(review.cleanliness_rating)
-#             class_size_total += int(review.class_size_rating)
-#             class_schedule_total += int(review.schedule_rating)
-#             class_pace_total += int(review.pace_rating)
-#         studio.overall_rating = (overall_total / num_reviews)
-#         studio.amenities_rating = (amenities_total / num_reviews)
-#         studio.cleanliness_rating = (cleanliness_total / num_reviews)
-#         studio.class_size_rating = (class_size_total / num_reviews)
-#         studio.schedule_rating = (class_schedule_total / num_reviews)
-#         studio.pace_rating = (class_pace_total / num_reviews)
-
-#     db.session.commit()
-
 def initial_studio_reviews():
     """Generate initial reviews for each studio"""
+
+    print "Initial Studio Reviews"
 
     #get all studios from db
     studios = Studio.query.all()
@@ -121,19 +81,6 @@ def initial_studio_reviews():
         studio.pace_rating = randint(2, 3)
 
     db.session.commit()
-
-
-def generate_tips():
-    """Create data for tips"""
-
-    #get all reviews from db
-    reviews = Review.query.all()
-
-
-
-
-def generate_instructors():
-    """Create instructors and instructor reviews"""
 
 
 def set_val_user_id():

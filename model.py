@@ -58,7 +58,7 @@ class Studio(db.Model):
 
         return "<Studio studio_id=%s name=%s>" % (self.studio_id, self.name)
 
-    #Define relationship to instructors 
+    #Define relationship to instructors
     instructors = db.relationship("Instructor", backref="studio")
 
 
@@ -168,16 +168,6 @@ def example_data_users():
     db.session.add_all([celia, pam, amber])
     db.session.commit()
 
-def example_data_studios():
-    """Create sample studio data"""
-
-    #Empty out existing data
-    Studio.query.delete()
-
-    yoga = Studio(studio_id=1, name="Yoga", zipcode="94110")
-
-    db.session.add(yoga)
-    db.session.commit
 
 
 ##############################################################################
@@ -194,8 +184,7 @@ def connect_to_db(app, db_uri='postgresql:///project'):
 
 
 if __name__ == "__main__":
-    # As a convenience, if we run this module interactively, it will leave
-    # you in a state of being able to work with the database directly.
+    # Allows you to work with the database interactively 
 
     from server import app
     connect_to_db(app)

@@ -159,9 +159,6 @@ def show_user_profile(user_id):
 def check_user_preferences():
     """Check for a user's existing preferences to prefill form"""
 
-    # import pdb
-    # pdb.set_trace()
-
     user_id = session['user']
 
     user = User.query.filter(User.user_id == user_id).one()
@@ -235,10 +232,6 @@ def process_search():
     category_result = process.extractOne(term, choices)
 
     #get names of studios already in database
-
-    # import pdb
-    # pdb.set_trace()
-
     studios_in_db = Studio.query.filter(func.lower(Studio.name).like("%"+term[1:3]+"%")).all()
     studio_names = []
     for studio in studios_in_db:
@@ -280,12 +273,10 @@ def process_search():
         return render_template("search_results.html", studios=studios,
                        lat=lat, lng=lng, location=location,
                        term=term)
-
     elif not name_result:
         flash("""Hmmm, we can't find any results that match your search.
                Please try again.""")
         return redirect("/")       
-
     elif name_result[1] > 90:
         term = name_result[0]
         params = {
@@ -316,7 +307,7 @@ def process_search():
 
 @app.route('/studios.json', methods=['GET'])
 def get_studio_location():
-    """Create a JSON object with latitudes and longitudes"""
+    """Create a JSON object with studio latitudes and longitudes"""
 
     location = request.args.get("location")
     term = request.args.get("term")
@@ -338,7 +329,6 @@ def get_studio_location():
     for studio in studios:
         results[str(studio.name)] = {"latitude": float(str(studio.location.coordinate.latitude)),
                                      "longitude": float(str(studio.location.coordinate.longitude))}
-
 
     return jsonify(results)
 
@@ -420,6 +410,7 @@ def show_studio_profile(studio_id):
     else:
         individual_score = "Set your preferences to get an individualized score for each studio!"
 
+    #translate scores in star ratings
     individual_stars = stars.get(str(individual_score))
     individual_empties = empties.get(str(individual_score))
 
@@ -437,8 +428,9 @@ def show_studio_profile(studio_id):
     instructors = studio_db.instructors
 
     instructor_details = {}
-    #get instructor average rating
-
+    
+    # get instructor average rating, get the top rated instructor
+    # translate score into star rating
     for instructor in instructors:
         instructor_details[str(instructor.name)] = []
         for review in instructor.instructorreviews:
@@ -490,8 +482,6 @@ def show_studio_profile(studio_id):
 def check_instructor_move():
     """Update db with instructor move info"""
 
-    # import pdb
-    # pdb.set_trace()
     #get user input from form
     name = request.form.get("name")
     old_studio_id = request.form.get("studio_id")
@@ -606,9 +596,6 @@ def process_review_form():
 
     studio = Studio.query.filter(Studio.studio_id == studio_id).first()
 
-    # import pdb 
-    # pdb.set_trace()
-
     all_reviews = studio.reviews
 
     #get number of reviews to use for average
@@ -655,9 +642,6 @@ def process_review_form():
 def check_favorite_status():
     """Checks if user has favorited studio"""
 
-    # import pdb
-    # pdb.set_trace()
-
     #get studio info from ajax request
     studio_id = request.args.get("studio_id")
 
@@ -700,6 +684,7 @@ def favorite_studio():
         session['favorite'] = favorite_id
 
     return jsonify({'favorite_studio': 'success'})
+
 
 @app.route('/unfavorite/studio', methods=["POST"])
 def unfavorite_studio():
