@@ -23,7 +23,7 @@
 </div>
 
 
-<div class="col-xs-12 col-md-6 col-lg-push-2 col-lg-3" id="ratings">
+<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3" id="ratings">
     <h4>Ratings:</h4>
     {% if 1 > review_count %}
     <p>This studio hasn't been reviewed yet.</p>
@@ -98,10 +98,10 @@
     {% endif %}
 </div>
 
-<div class="col-xs-12 col-md-6 col-lg-push-2 col-lg-3" id="top">
+<div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3" id="top">
     <h4>Top Instructors:</h4>
-          <p>Name: {{ top_instructor }} 
-            Rating: 
+          <p>Name: {{ top_instructor }}</p> 
+            <p>Rating: 
             {% for star in instructor_stars %}
             <span class="glyphicon glyphicon-star"></span>
             {% endfor %}
@@ -160,7 +160,7 @@
       <th>Instructor Name</th>
       <th>Rating</th>
     </tr>
-    {% for review in instructor.instructorreviews %}
+    {% for review in instructor.instructorreviews[:1] %}
         {% if review.instructor.name %}
             <tr>
             <td>{{ review.instructor.name }}</td>
