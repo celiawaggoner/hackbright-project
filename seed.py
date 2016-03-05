@@ -54,10 +54,9 @@ def generate_reviews():
         for studio in studios:
             review = Review(user_id=user.user_id,
                             studio_id=studio.studio_id,
-                            # overall_rating=randint(4, 5),
                             amenities_rating=randint(4, 5),
-                            cleanliness_rating=randint(1, 2),
-                            class_size_rating=randint(4, 5),
+                            cleanliness_rating=randint(4, 5),
+                            class_size_rating=randint(1, 2),
                             schedule_rating=randint(4, 5),
                             pace_rating=randint(2, 3))
             db.session.add(review)
@@ -75,8 +74,8 @@ def initial_studio_reviews():
 
     for studio in studios:
         studio.amenities_rating = randint(4, 5)
-        studio.cleanliness_rating = randint(1, 2)
-        studio.class_size_rating = randint(4, 5)
+        studio.cleanliness_rating = randint(4, 5)
+        studio.class_size_rating = randint(1, 2)
         studio.schedule_rating = randint(4, 5)
         studio.pace_rating = randint(2, 3)
 

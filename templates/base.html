@@ -1,8 +1,8 @@
 <!doctype html>
 <html>
 <head>
-  <title>HB Project</title>
-  <link rel="icon" type="image/png" href="/static.img/kettlebell.png"/>
+  <title>Pulse</title>
+  <link rel="icon" type="image/png" href="/static/img/kettlebell.png"/>
 
   <link rel="stylesheet" href="/static/css/styles.css">
 
@@ -15,13 +15,11 @@
 
 <body>
 
+<div id="wrap">
+
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-          <!--         <a class="navbar-brand" href="/">
-                    <img alt="Brand" src="http://trubeapp.com/images/update/icon-yoga.png">
-                  </a> -->
-              <!--   <button type="button" class="btn btn-default navbar-btn navbar-left" role="Register"><a href="/">Home</a></button> -->
                 <a class="navbar-brand" href="/" id="brand">
                         <img alt="Brand" src="/static/img/design.png" style="height:45px; width: 45px; border-radius: 10px">
                       </a>
@@ -32,32 +30,33 @@
                     </div>
                     <input type="submit" class="btn btn-default" value="Search">
                 </form>
+              </div> <!--close header-->
             {% if not session.user %}
-            <ul class="navbar-header navbar-right nav nav-pills">
-              <button type="button" class="btn btn-default navbar-btn" role="Register"><a href="/register">Register</a></button>
-              <button type="button" class="btn btn-default navbar-btn" role="Login"><a href="/login">Login</a></button>
-            </ul> 
+            <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+              <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+          </div>
             {% endif %}
             {% if session.user %}
-            <ul class="navbar-header navbar-right nav-pills">
-              <button type="button" class="btn btn-default navbar-btn" role="Logout"><a href="/logout">Logout</button></a>
-              <button type="button" class="btn btn-default navbar-btn"role="Profile"><a href="/user/{{ session.user }}">Profile</a></button>
-            </ul> 
+            <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/user/{{ session.user }}"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+              <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+            </ul>
+          </div>
             {% endif %}
         </div>
-    </div>
 </nav>
 
-<!-- <div class="panel panel-default">
-  <div class="panel-body">
-    Panel content
-  </div>
-  <div class="panel-footer">Panel footer</div>
-</div>
- -->
+<footer id="footer">
+  <div class="container-fluid">
+  </div>  
+</footer>
     <ul>
         {% for message in get_flashed_messages() %}
-            <li>{{ message }}</li>
+            <p>{{ message }}</p>
         {% endfor %}
     </ul>
 
@@ -82,6 +81,8 @@
 
 
   {% block content %} put your content here {% endblock %}
+
+</div>
 
 </body>
 </html>

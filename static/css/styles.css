@@ -29,19 +29,22 @@ body {
     border: 1px solid white;
     display: inline-block;
     position: absolute;
-    height: 600px;
-    width: 600px;
+    height: 500px;
+    width: 500px;
 }
 #studio_pic {
     border-radius: 10px;
     border: 1px solid black;
-    height: 100px;
-    width: 100px;
+    height: 120px;
+    width: 120px;
 }
 #search-results {
     display: inline-block;
 }
 
+.table-bordered {
+    border-radius: 10px;
+}
 th {
     background-color: #33d6ff;
     color: white;
@@ -70,9 +73,21 @@ tr:hover {
       padding: 10px;
       margin:5px;
   }
-  * {
+
+* {
     font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
   }
 
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
 
-
+#search_result {
+      width: 65%;
+      border: 1px solid white;
+      border-radius: 20px;
+      background-color: rgba(255, 255, 255, 0.5);
+      padding: 5px;
+      margin: 5px;
+}

@@ -14,7 +14,7 @@
     <h4>Categories:</h4>
     <ul>
         {% for category in studio.categories %}
-        <li>{{ category.name }}</li>
+        <p>{{ category.name }}</p>
         {% endfor %}
     </ul>
     <div id="map" data-latitude={{ latitude }} data-longitude={{ longitude }} data-name={{ name }}></div>
@@ -113,7 +113,7 @@
     <ul>
     {% for tip in tips[:5] %}
     {% if tip %}
-    <li>{{ tip }}</li>
+    <p>{{ tip }}</p>
     {% endif %}
     {% endfor %}
     </ul>
