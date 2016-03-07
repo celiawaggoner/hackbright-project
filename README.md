@@ -30,7 +30,7 @@ Pulse is a fullstack web application that helps people discover new workout stud
 
 #### Enter seach terms and click the 'Search' button
 
-![Entering search terms](/static/docs/homepage)
+![Entering search terms](/static/docs/homepage.png)
 
 This button will send the user inputs to the server and process them using fuzzy string comparison. The resulting terms will either be used to query the database for a matching studio or be used as inputs for a Yelp API search request. 
 
