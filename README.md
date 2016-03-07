@@ -36,25 +36,37 @@ This button will send the user inputs to the server and process them using fuzzy
 
 ### View search results
 
+![Search results](/static/docs/search_results.png)
+
 The search will display the matching results and show data from the Yelp API request as well as a Google map with a marker for the location of each studio. 
 
 ### Studio details page
+
+![Studio details](/static/docs/studio_profile.png)
 
 Clicking on the name of a studio will bring a user to that studio's details page. This page displays information provided by the Yelp API, a map, as well as reviews and ratings infomration pulled from a database query. Users can click the 'Favorite' button to add or remove the studio from their list of favorites which is saved in the database.
 
 ### Instructor move form
 
+![Instructor move form](/static/docs/instructor_move.png)
+
 Users can submit a form if a particular instructor has switched studios. Users enter the name and location of the new studio. These inputs are used to query the database for the studio and then update the instructor's information in the database so that his or her reviews are reflected on the new page.
 
 ### Review form
+
+![Review form](/static/docs/review_form.png)
 
 Users can click the 'Review this studio' button to submit a review with ratings for various aspects of the studios. Their ratings are calculated into the average star ratings that are displayed on the studio details page. 
 
 ### User profile page
 
+![User profile page](/static/docs/user_profile.png)
+
 Users can create accounts in order to view a profile page that queries the database to display their personal information, a selection of their reviews, their favorite studios, and their preferences.
 
 ### User preferences form
+
+![User preferences form](/static/docs/user_preferences.png)
 
 Users can update their preferences in this form in order to update the database. Each preference is given a weight and used to create a weighted average and an individualized score for each studio. 
 
