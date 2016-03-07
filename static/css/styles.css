@@ -1,6 +1,5 @@
 
-
- #map {
+#map {
     height: 260px;
     width: 260px;
     border-radius: 10px;
@@ -42,9 +41,9 @@ body {
     display: inline-block;
 }
 
-.table-bordered {
+/*.table-bordered {
     border-radius: 10px;
-}
+}*/
 th {
     background-color: #24ecf2;
     color: white;
@@ -67,7 +66,7 @@ tr:hover {
     padding: 10px;
     margin:10px;
   }
-  .table {
+.table {
       border: 1px solid white;
       background-color: rgba(255, 255, 255, 0.5);
       padding: 10px;
@@ -91,4 +90,3 @@ body {
       padding: 5px;
       margin: 5px;
 }
-

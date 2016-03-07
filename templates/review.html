@@ -15,7 +15,7 @@
         <legend>Rate the studio:</legend>
             <h4>Amenities</h4>
             <div>
-            <span>None.</span>
+            <span style="font-weight:bold;">None.</span>
             <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="1" required>1
             </label>
@@ -31,11 +31,11 @@
             <label class="radio-inline">
             <input type="radio" name="amenities_rating" value="5">5
             </label>
-            <span>Showers and lockers galore!</span>
+            <span style="font-weight:bold;">Showers and lockers galore!</span>
             </div>
             <h4>Cleanliness</h4>
             <div>
-            <span>So gross.</span>
+            <span style="font-weight:bold;">So gross.</span>
             <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="1" required>1
             </label>
@@ -51,15 +51,15 @@
             <label class="radio-inline">
             <input type="radio" name="cleanliness_rating" value="5">5
             </label>
-            <span>Spotless!</span>
+            <span style="font-weight:bold;">Spotless!</span>
             </div>
     </fieldset>
-
+    <br>
     <fieldset>
         <legend>Rate the classes:</legend>
             <h4>Class size</h4>
             <div>
-            <span>Always way too crowded.</span>
+            <span style="font-weight:bold;">Always way too crowded.</span>
             <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="1" required>1
             </label>
@@ -75,11 +75,11 @@
             <label class="radio-inline">
             <input type="radio" name="class_size_rating" value="5">5
             </label>
-            <span>Never too packed!</span>
+            <span style="font-weight:bold;">Never too packed!</span>
             </div>
             <h4>Class schedule</h4>
             <div>
-            <span>Can never find a class that works for me.</span>
+            <span style="font-weight:bold;">Very limited.</span>
             <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="1" required>1
             </label>
@@ -95,7 +95,7 @@
             <label class="radio-inline">
             <input type="radio" name="schedule_rating" value="5">5
             </label>
-            <span>Plenty of options throughout the week!</span>
+            <span style="font-weight:bold;">Plenty of options!</span>
             </div>
             <h4>Class pace</h4>
             <div>
@@ -110,16 +110,16 @@
             </label>
             </div>
     </fieldset>
+    <br>
     <fieldset>
         <legend>Share more about your experience:</legend>
-        <label>Who was your instructor?</label>
-        <label class="radio-inline">
+        <label><p>Who was your instructor?</p></label>
         <div class="form-group">
-        <input type="text" name="name" placeholder="Name" class="form-control">
+        <input type="text" style="width:25%;" name="name" placeholder="Name" class="form-control">
         </div>
-        </label>
-        <p>What'd you think?</p>
-        <span>Never again!</span>
+        <label><p>What'd you think?</p></label>
+        <div class="form-group">
+        <span style="font-weight:bold;">Never again!</span>
         <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="1">1
         </label>
@@ -135,8 +135,9 @@
         <label class="radio-inline">
         <input type="radio" name="instructor_rating" value="5">5
         </label>
-        <span>Best ever!</span>
-        <p><label>Any other tips to share?</label></p>
+        <span style="font-weight:bold;">Best ever!</span>
+        </div>
+        <label><p>Any other tips to share?</p></label>
         <div class="form-group">
         <input type="textarea" name="tip_text" class="form-control" rows="3" style="width: 50%;">
         </div>
