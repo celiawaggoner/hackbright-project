@@ -368,8 +368,9 @@ def show_studio_profile(studio_id):
     favorited = Favorite.query.filter(Favorite.user_id == user_id, Favorite.studio_id == studio_id).first()
 
     #get studio from db
-    studio_db = Studio.query.filter(Studio.studio_id == studio_id).one()
+    studio_db = Studio.query.filter(Studio.studio_id == studio_id).first()
 
+    
     reviews = studio_db.reviews
 
     #get all tip_texts from reviews with tips included

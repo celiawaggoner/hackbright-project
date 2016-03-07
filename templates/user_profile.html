@@ -31,11 +31,11 @@
     {% if 1 > user.amenities_pref %}
     <h5>Set your preferences by clicking the button below!</h5>
     {% else %}
-    <h5>Amentiies: {{ amenities }}</h5>
-    <h5>Cleanliness: {{ cleanliness }}</h5>
-    <h5>Class size: {{ class_size }}</h5>
-    <h5>Class schedule: {{ schedule }}</h5>
-    <h5>Class pace: {{ pace }}</h5>
+    <h5><span style="font-weight:bold;">Amentiies:</span> {{ amenities }}</h5>
+    <h5><span style="font-weight:bold;">Cleanliness:</span> {{ cleanliness }}</h5>
+    <h5><span style="font-weight:bold;">Class size:</span> {{ class_size }}</h5>
+    <h5><span style="font-weight:bold;">Class schedule:</span> {{ schedule }}</h5>
+    <h5><span style="font-weight:bold;">Class pace:</span> {{ pace }}</h5>
     {% endif %}
      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" id="prefbtn">Update <span class="glyphicon glyphicon-cog"></span></button>
 

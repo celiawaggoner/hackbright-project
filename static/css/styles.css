@@ -46,7 +46,7 @@ body {
     border-radius: 10px;
 }
 th {
-    background-color: #33d6ff;
+    background-color: #24ecf2;
     color: white;
   }
 tr:hover {
@@ -91,3 +91,4 @@ body {
       padding: 5px;
       margin: 5px;
 }
+

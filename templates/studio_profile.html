@@ -14,7 +14,7 @@
     <h4>Categories:</h4>
     <ul>
         {% for category in studio.categories %}
-        <p>{{ category.name }}</p>
+        <h5>{{ category.name }}</h5>
         {% endfor %}
     </ul>
     <div id="map" data-latitude={{ latitude }} data-longitude={{ longitude }} data-name={{ name }}></div>
@@ -28,8 +28,8 @@
     {% if 1 > review_count %}
     <p>This studio hasn't been reviewed yet.</p>
     {% else %}
-    <h5>Review count: {{ review_count }}</h5>
-    <h5>Individualized Score: {% if individual_stars %}
+    <h5><span style="font-weight:bold;">Review count:</span> {{ review_count }}</h5>
+    <h5><span style="font-weight:bold;">Individualized score:</span> {% if individual_stars %}
                                 {% for star in individual_stars %}
                                 <span class="glyphicon glyphicon-star"></span>
                                 {% endfor %}
@@ -40,35 +40,35 @@
                               <p>Set your preferences to get an individualized score for each studio!</p>
                               {% endif %}
     </h5>
-    <h5>Amenities score: {% for star in amenities_stars%}
+    <h5><span style="font-weight:bold;">Amenities score:</span> {% for star in amenities_stars%}
                         <span class="glyphicon glyphicon-star"></span>
                          {% endfor %}
                          {% for star in amenities_empties %}
                          <span class="glyphicon glyphicon-star-empty"></span>
                           {% endfor %}
     </h5>
-    <h5>Cleanliness score: {% for star in cleanliness_stars %}
+    <h5><span style="font-weight:bold;">Cleanliness score:</span> {% for star in cleanliness_stars %}
                             <span class="glyphicon glyphicon-star"></span>
                             {% endfor %}
                             {% for star in cleanliness_empties %}
                             <span class="glyphicon glyphicon-star-empty"></span>
                              {% endfor %}
     </h5>
-    <h5>Class size score: {% for star in class_size_stars %}
+    <h5><span style="font-weight:bold;">Class size score:</span> {% for star in class_size_stars %}
                           <span class="glyphicon glyphicon-star"></span>
                           {% endfor %}
                           {% for star in class_size_empties %}
                           <span class="glyphicon glyphicon-star-empty"></span>
                            {% endfor %}
     </h5>
-    <h5>Schedule score: {% for star in schedule_stars %}
+    <h5><span style="font-weight:bold;">Schedule score:</span> {% for star in schedule_stars %}
                         <span class="glyphicon glyphicon-star"></span>
                         {% endfor %}
                         {% for star in schedule_empties %}
                         <span class="glyphicon glyphicon-star-empty"></span>
                          {% endfor %}
     </h5>
-    <h5>What people are saying about the pace of this class: 
+    <h5><span style="font-weight:bold;">Pace of these classes:</span> 
     {{ pace_rating }}
     </h5>
     {% endif %}
@@ -99,9 +99,9 @@
 </div>
 
 <div class="col-xs-12 col-md-6 col-lg-push-1 col-lg-3" id="top">
-    <h4>Top Instructors:</h4>
-          <p>Name: {{ top_instructor }}</p> 
-            <p>Rating: 
+    <h4>Top Instructor:</h4>
+          <p><span style="font-weight:bold;">Name:</span> {{ top_instructor }}</p> 
+            <p><span style="font-weight:bold;">Rating:</span> 
             {% for star in instructor_stars %}
             <span class="glyphicon glyphicon-star"></span>
             {% endfor %}
