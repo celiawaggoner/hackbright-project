@@ -14,7 +14,7 @@
     <h4>Categories:</h4>
     <ul>
         {% for category in studio.categories %}
-        <h5>{{ category.name }}</h5>
+        <p>{{ category.name }}</p>
         {% endfor %}
     </ul>
     <div id="map" data-latitude={{ latitude }} data-longitude={{ longitude }} data-name={{ name }}></div>

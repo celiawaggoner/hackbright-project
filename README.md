@@ -2,7 +2,7 @@
 
 Learn more about the developer: www.linkedin.com/in/celiawaggoner
 
-Pulse is a web app created by Celia Waggoner that helps people discover new workout studios. Users can also create an account to review studios and instructors, save their favorite studios, and set weighted preferences in order to view an individualized score for each studio. 
+Pulse is a web app created by Celia Waggoner that helps people find workout studios. Users can also create an account to review studios and instructors, save their favorite studios, and set weighted preferences in order to view an individualized score for each studio. 
 
 ## Table of Contents
 * [Technologies Used](#technologiesused)
