@@ -399,21 +399,22 @@ def show_studio_profile(studio_id):
                "0": []}
 
     #use weighted average to create user-specific score for this studio
-    if user.amenities_pref:
-        individual_score = ((int(user.amenities_pref) * int(studio_db.amenities_rating))
-                        + (int(user.cleanliness_pref) * int(studio_db.cleanliness_rating))
-                        + (int(user.class_size_pref) * int(studio_db.class_size_rating))
-                        + (int(user.class_schedule_pref) * int(studio_db.schedule_rating))
-                        + (int(user.class_pace_pref) * int(studio_db.pace_rating))) / (int(user.amenities_pref)
-                        + int(user.cleanliness_pref)
-                        + int(user.class_size_pref) + int(user.class_schedule_pref)
-                        + int(user.class_pace_pref))
+    if review_count > 0:
+        if user.amenities_pref:
+            individual_score = ((int(user.amenities_pref) * int(studio_db.amenities_rating))
+                            + (int(user.cleanliness_pref) * int(studio_db.cleanliness_rating))
+                            + (int(user.class_size_pref) * int(studio_db.class_size_rating))
+                            + (int(user.class_schedule_pref) * int(studio_db.schedule_rating))
+                            + (int(user.class_pace_pref) * int(studio_db.pace_rating))) / (int(user.amenities_pref)
+                            + int(user.cleanliness_pref)
+                            + int(user.class_size_pref) + int(user.class_schedule_pref)
+                            + int(user.class_pace_pref))
     else:
         individual_score = "Set your preferences to get an individualized score for each studio!"
 
-    #translate scores in star ratings
-    individual_stars = stars.get(str(individual_score))
-    individual_empties = empties.get(str(individual_score))
+        #translate scores in star ratings
+        individual_stars = stars.get(str(individual_score))
+        individual_empties = empties.get(str(individual_score))
 
     amenities_stars = stars.get(str(studio_db.amenities_rating))
     cleanliness_stars = stars.get(str(studio_db.cleanliness_rating))
